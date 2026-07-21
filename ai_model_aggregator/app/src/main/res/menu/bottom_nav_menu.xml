@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_home"
+        android:icon="@drawable/ic_chat"
+        android:title="对话" />
+    <item
+        android:id="@+id/nav_code"
+        android:icon="@drawable/ic_code"
+        android:title="代码" />
+    <item
+        android:id="@+id/nav_image"
+        android:icon="@drawable/ic_image"
+        android:title="图片" />
+    <item
+        android:id="@+id/nav_cluster"
+        android:icon="@drawable/ic_compare"
+        android:title="集群" />
+    <item
+        android:id="@+id/nav_history"
+        android:icon="@drawable/ic_history"
+        android:title="历史" />
+</menu>

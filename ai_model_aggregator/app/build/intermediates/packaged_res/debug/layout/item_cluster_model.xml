@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:paddingHorizontal="16dp"
+    android:paddingVertical="8dp"
+    android:background="?attr/selectableItemBackground">
+
+    <CheckBox android:id="@+id/cb_model" android:layout_width="wrap_content" android:layout_height="wrap_content" />
+    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical" android:layout_marginStart="8dp">
+        <TextView android:id="@+id/tv_model_name" android:textSize="14sp" android:textColor="@color/colorOnSurface" />
+        <TextView android:id="@+id/tv_vendor_name" android:textSize="12sp" android:textColor="@color/colorTextSecondary" />
+        <TextView android:id="@+id/tv_tags" android:textSize="11sp" android:textColor="@color/colorPrimary" />
+    </LinearLayout>
+</LinearLayout>

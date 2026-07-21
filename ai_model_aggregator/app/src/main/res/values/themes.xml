@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.AIAggregator" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="colorPrimary">#4A90D9</item>
+        <item name="colorPrimaryVariant">#3A7BC8</item>
+        <item name="colorOnPrimary">#FFFFFF</item>
+        <item name="colorSecondary">#6C5CE7</item>
+        <item name="colorSecondaryVariant">#5A4BD1</item>
+        <item name="colorOnSecondary">#FFFFFF</item>
+        <item name="android:colorBackground">#F5F7FA</item>
+        <item name="colorSurface">#FFFFFF</item>
+        <item name="colorOnSurface">#333333</item>
+        <item name="colorError">#E53935</item>
+        <item name="colorOnError">#FFFFFF</item>
+    </style>
+</resources>

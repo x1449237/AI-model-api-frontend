@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/colorBackground">
+
+    <EditText android:id="@+id/cluster_prompt" android:layout_width="match_parent" android:layout_height="wrap_content" android:minHeight="80dp" android:background="@color/colorSurface" android:padding="16dp" android:hint="输入问题，将同时发送给已选模型..." android:textSize="14sp" android:gravity="top" android:inputType="textMultiLine" />
+
+    <LinearLayout android:id="@+id/cluster_status" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:background="@color/colorSurface" android:padding="12dp" android:gravity="center_vertical">
+        <TextView android:id="@+id/status_text" android:text="请至少选择 2 个模型" android:textSize="13sp" android:textColor="@color/colorTextSecondary" />
+        <View android:layout_width="0dp" android:layout_height="0dp" android:layout_weight="1" />
+        <Button android:id="@+id/btn_run_cluster" android:layout_width="wrap_content" android:layout_height="36dp" android:text="集群对比" android:textSize="13sp" android:textColor="@android:color/white" android:backgroundTint="@color/colorPrimary" android:enabled="false" />
+    </LinearLayout>
+
+    <LinearLayout android:id="@+id/cluster_select_area" android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" android:orientation="vertical">
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:padding="16dp" android:text="选择模型（至少2个，最多5个）" android:textSize="14sp" android:textColor="@color/colorOnSurface" android:textStyle="bold" />
+        <androidx.recyclerview.widget.RecyclerView android:id="@+id/cluster_model_list" android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" />
+    </LinearLayout>
+
+    <ScrollView android:id="@+id/cluster_results_area" android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" android:visibility="gone">
+        <LinearLayout android:id="@+id/cluster_results_container" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="16dp" />
+    </ScrollView>
+
+    <ProgressBar android:id="@+id/cluster_progress" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="center" android:visibility="gone" />
+</LinearLayout>

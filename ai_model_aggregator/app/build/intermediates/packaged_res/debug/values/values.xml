@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="image_counts">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+    </string-array>
+    <string-array name="image_ratios">
+        <item>1:1</item>
+        <item>16:9</item>
+        <item>9:16</item>
+        <item>4:3</item>
+        <item>3:4</item>
+    </string-array>
+    <color name="colorAccent">#6C5CE7</color>
+    <color name="colorAiBubble">#FFFFFF</color>
+    <color name="colorBackground">#F5F7FA</color>
+    <color name="colorChipBg">#F0F2F5</color>
+    <color name="colorCodeBg">#1E1E1E</color>
+    <color name="colorCodeText">#D4D4D4</color>
+    <color name="colorDivider">#EEEEEE</color>
+    <color name="colorOnSurface">#333333</color>
+    <color name="colorPrimary">#4A90D9</color>
+    <color name="colorPrimaryDark">#3A7BC8</color>
+    <color name="colorSurface">#FFFFFF</color>
+    <color name="colorTagBlue">#E8F0FE</color>
+    <color name="colorTagBlueText">#1A5BA0</color>
+    <color name="colorTagOrange">#FFF3E0</color>
+    <color name="colorTagOrangeText">#E65100</color>
+    <color name="colorTextSecondary">#999999</color>
+    <color name="colorUserBubble">#4A90D9</color>
+    <string name="app_name">AI聚合助手</string>
+    <style name="Theme.AIAggregator" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="colorPrimary">#4A90D9</item>
+        <item name="colorPrimaryVariant">#3A7BC8</item>
+        <item name="colorOnPrimary">#FFFFFF</item>
+        <item name="colorSecondary">#6C5CE7</item>
+        <item name="colorSecondaryVariant">#5A4BD1</item>
+        <item name="colorOnSecondary">#FFFFFF</item>
+        <item name="android:colorBackground">#F5F7FA</item>
+        <item name="colorSurface">#FFFFFF</item>
+        <item name="colorOnSurface">#333333</item>
+        <item name="colorError">#E53935</item>
+        <item name="colorOnError">#FFFFFF</item>
+    </style>
+</resources>

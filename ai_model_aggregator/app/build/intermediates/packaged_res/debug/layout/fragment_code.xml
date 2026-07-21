@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/colorBackground">
+
+    <HorizontalScrollView android:layout_width="match_parent" android:layout_height="44dp" android:background="@color/colorSurface" android:scrollbars="none">
+        <LinearLayout android:id="@+id/lang_chips" android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="horizontal" android:paddingHorizontal="12dp" android:gravity="center_vertical" />
+    </HorizontalScrollView>
+
+    <LinearLayout android:layout_width="match_parent" android:layout_height="48dp" android:background="@color/colorSurface" android:gravity="center_vertical" android:paddingHorizontal="12dp">
+        <Button android:id="@+id/btn_select_model" android:layout_width="wrap_content" android:layout_height="36dp" android:text="选择模型" android:textSize="13sp" style="@style/Widget.Material3.Button.TonalButton" />
+        <View android:layout_width="0dp" android:layout_height="0dp" android:layout_weight="1" />
+        <TextView android:id="@+id/selected_model_text" android:text="未选择模型" android:textSize="12sp" android:textColor="@color/colorTextSecondary" />
+    </LinearLayout>
+
+    <EditText android:id="@+id/code_desc_input" android:layout_width="match_parent" android:layout_height="wrap_content" android:minHeight="80dp" android:background="@color/colorSurface" android:padding="16dp" android:hint="描述你想要生成的代码..." android:textSize="14sp" android:gravity="top" android:inputType="textMultiLine" />
+
+    <Button android:id="@+id/btn_generate" android:layout_width="match_parent" android:layout_height="48dp" android:layout_margin="16dp" android:text="生成代码" android:textColor="@android:color/white" android:backgroundTint="@color/colorPrimary" />
+
+    <LinearLayout android:id="@+id/result_header" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:paddingHorizontal="16dp" android:visibility="gone">
+        <View android:layout_width="0dp" android:layout_height="0dp" android:layout_weight="1" />
+        <Button android:id="@+id/btn_copy" android:layout_width="wrap_content" android:layout_height="36dp" android:text="复制" android:textSize="12sp" style="@style/Widget.Material3.Button.TextButton" />
+        <Button android:id="@+id/btn_export" android:layout_width="wrap_content" android:layout_height="36dp" android:text="导出" android:textSize="12sp" style="@style/Widget.Material3.Button.TextButton" />
+    </LinearLayout>
+
+    <ScrollView android:id="@+id/code_output_scroll" android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" android:visibility="gone">
+        <HorizontalScrollView android:layout_width="match_parent" android:layout_height="wrap_content">
+            <TextView android:id="@+id/code_output" android:layout_width="wrap_content" android:layout_height="wrap_content" android:padding="16dp" android:background="@color/colorCodeBg" android:textColor="@color/colorCodeText" android:textSize="13sp" android:fontFamily="monospace" android:textIsSelectable="true" android:lineSpacingExtra="4dp" />
+        </HorizontalScrollView>
+    </ScrollView>
+
+    <TextView android:id="@+id/empty_state" android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" android:gravity="center" android:text="选择模型和语言，输入需求描述\n点击生成代码" android:textColor="@color/colorTextSecondary" android:textSize="14sp" android:lineSpacingExtra="4dp" />
+</LinearLayout>
