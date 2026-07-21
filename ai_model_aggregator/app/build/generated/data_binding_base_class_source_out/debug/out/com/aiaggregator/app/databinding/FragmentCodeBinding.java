@@ -33,6 +33,9 @@ public final class FragmentCodeBinding implements ViewBinding {
   public final MaterialButton btnGenerate;
 
   @NonNull
+  public final MaterialButton btnSaveLocal;
+
+  @NonNull
   public final MaterialButton btnSelectModel;
 
   @NonNull
@@ -61,15 +64,16 @@ public final class FragmentCodeBinding implements ViewBinding {
 
   private FragmentCodeBinding(@NonNull LinearLayout rootView, @NonNull MaterialButton btnCopy,
       @NonNull MaterialButton btnExport, @NonNull MaterialButton btnGenerate,
-      @NonNull MaterialButton btnSelectModel, @NonNull TextInputEditText codeDescInput,
-      @NonNull TextView codeOutput, @NonNull ScrollView codeOutputScroll,
-      @NonNull LinearLayout emptyState, @NonNull LinearLayout langChips,
-      @NonNull ProgressBar progressBar, @NonNull LinearLayout resultHeader,
-      @NonNull TextView selectedModelText) {
+      @NonNull MaterialButton btnSaveLocal, @NonNull MaterialButton btnSelectModel,
+      @NonNull TextInputEditText codeDescInput, @NonNull TextView codeOutput,
+      @NonNull ScrollView codeOutputScroll, @NonNull LinearLayout emptyState,
+      @NonNull LinearLayout langChips, @NonNull ProgressBar progressBar,
+      @NonNull LinearLayout resultHeader, @NonNull TextView selectedModelText) {
     this.rootView = rootView;
     this.btnCopy = btnCopy;
     this.btnExport = btnExport;
     this.btnGenerate = btnGenerate;
+    this.btnSaveLocal = btnSaveLocal;
     this.btnSelectModel = btnSelectModel;
     this.codeDescInput = codeDescInput;
     this.codeOutput = codeOutput;
@@ -123,6 +127,12 @@ public final class FragmentCodeBinding implements ViewBinding {
       id = R.id.btn_generate;
       MaterialButton btnGenerate = ViewBindings.findChildViewById(rootView, id);
       if (btnGenerate == null) {
+        break missingId;
+      }
+
+      id = R.id.btn_save_local;
+      MaterialButton btnSaveLocal = ViewBindings.findChildViewById(rootView, id);
+      if (btnSaveLocal == null) {
         break missingId;
       }
 
@@ -181,8 +191,8 @@ public final class FragmentCodeBinding implements ViewBinding {
       }
 
       return new FragmentCodeBinding((LinearLayout) rootView, btnCopy, btnExport, btnGenerate,
-          btnSelectModel, codeDescInput, codeOutput, codeOutputScroll, emptyState, langChips,
-          progressBar, resultHeader, selectedModelText);
+          btnSaveLocal, btnSelectModel, codeDescInput, codeOutput, codeOutputScroll, emptyState,
+          langChips, progressBar, resultHeader, selectedModelText);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

@@ -1,13 +1,24 @@
 package com.aiaggregator.app.ui.image
 
+import android.app.Dialog
+import android.content.ContentValues
+import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.Matrix
+import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
 import android.os.Handler
 import android.os.Looper
+import android.provider.MediaStore
+import android.util.Base64
+import android.view.GestureDetector
 import android.view.LayoutInflater
+import android.view.MotionEvent
+import android.view.ScaleGestureDetector
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.ImageView
@@ -16,6 +27,9 @@ import android.widget.ProgressBar
 import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -26,11 +40,14 @@ import com.bumptech.glide.Glide
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.chip.Chip
 import com.google.android.material.textfield.TextInputEditText
-import com.google.android.material.textfield.TextInputLayout
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import okhttp3.*
+import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.FileOutputStream
 import java.io.IOException
+import java.io.InputStream
 import java.util.concurrent.TimeUnit
 
 class ImageFragment : Fragment() {
@@ -40,6 +57,8 @@ class ImageFragment : Fragment() {
     private var isGenerating = false
     private val handler = Handler(Looper.getMainLooper())
     private val gson = Gson()
+
+    private var referenceImageUri: Uri? = null
 
     private val client = OkHttpClient.Builder()
         .connectTimeout(30, TimeUnit.SECONDS)
@@ -63,11 +82,35 @@ class ImageFragment : Fragment() {
     private lateinit var numSpinner: Spinner
     private lateinit var promptInput: TextInputEditText
     private lateinit var btnGenerate: MaterialButton
+    private lateinit var btnSelectRefImage: MaterialButton
+    private lateinit var refImagePreview: ImageView
+    private lateinit var btnClearRefImage: Button
     private lateinit var resultArea: FrameLayout
     private lateinit var emptyState: LinearLayout
     private lateinit var progressBar: ProgressBar
     private lateinit var imageGrid: RecyclerView
     private lateinit var imageAdapter: ImageAdapter
+
+    // ── Image picker launcher ──
+    private lateinit var imagePickerLauncher: ActivityResultLauncher<String>
+
+    // ── Scale/zoom state ──
+    private var scaleFactor = 1.0f
+    private var currentScale = 1.0f
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        imagePickerLauncher = registerForActivityResult(
+            ActivityResultContracts.GetContent()
+        ) { uri: Uri? ->
+            if (uri != null) {
+                referenceImageUri = uri
+                refImagePreview.setImageURI(uri)
+                refImagePreview.visibility = View.VISIBLE
+                btnClearRefImage.visibility = View.VISIBLE
+            }
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -93,6 +136,9 @@ class ImageFragment : Fragment() {
         numSpinner = view.findViewById(R.id.num_spinner)
         promptInput = view.findViewById(R.id.img_prompt_input)
         btnGenerate = view.findViewById(R.id.btn_generate_img)
+        btnSelectRefImage = view.findViewById(R.id.btn_select_ref_image)
+        refImagePreview = view.findViewById(R.id.ref_image_preview)
+        btnClearRefImage = view.findViewById(R.id.btn_clear_ref_image)
         resultArea = view.findViewById(R.id.img_result_area)
         emptyState = view.findViewById(R.id.empty_img_state)
         progressBar = view.findViewById(R.id.img_progress)
@@ -136,7 +182,7 @@ class ImageFragment : Fragment() {
         val ctx = requireContext()
 
         // Aspect ratio
-        val ratioAdapter = ArrayAdapter(
+        val ratioAdapter = android.widget.ArrayAdapter(
             ctx,
             android.R.layout.simple_spinner_item,
             aspectRatios
@@ -147,7 +193,7 @@ class ImageFragment : Fragment() {
 
         // Image count (1-4)
         val counts = (1..4).map { it.toString() }
-        val countAdapter = ArrayAdapter(
+        val countAdapter = android.widget.ArrayAdapter(
             ctx,
             android.R.layout.simple_spinner_item,
             counts
@@ -162,7 +208,12 @@ class ImageFragment : Fragment() {
     // ═══════════════════════════════════════════
 
     private fun setupImageGrid() {
-        imageAdapter = ImageAdapter(generatedImages)
+        imageAdapter = ImageAdapter(
+            generatedImages,
+            onSaveClick = { url -> saveImageToGallery(url) },
+            onShareClick = { url -> shareImage(url) },
+            onImageClick = { url -> showZoomPreview(url) }
+        )
         imageGrid.layoutManager = GridLayoutManager(requireContext(), 2)
         imageGrid.adapter = imageAdapter
     }
@@ -173,6 +224,23 @@ class ImageFragment : Fragment() {
 
     private fun setupButtons() {
         btnGenerate.setOnClickListener { generateImages() }
+        btnSelectRefImage.setOnClickListener { selectReferenceImage() }
+        btnClearRefImage.setOnClickListener { clearReferenceImage() }
+    }
+
+    // ═══════════════════════════════════════════
+    //  Reference Image Selection
+    // ═══════════════════════════════════════════
+
+    private fun selectReferenceImage() {
+        imagePickerLauncher.launch("image/*")
+    }
+
+    private fun clearReferenceImage() {
+        referenceImageUri = null
+        refImagePreview.setImageDrawable(null)
+        refImagePreview.visibility = View.GONE
+        btnClearRefImage.visibility = View.GONE
     }
 
     // ═══════════════════════════════════════════
@@ -210,9 +278,26 @@ class ImageFragment : Fragment() {
         val encodedPrompt = java.net.URLEncoder.encode(prompt, "UTF-8")
         val requestCount = if (count > 1) count else 1
 
-        // Build request
-        val url = "https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image" +
-                "?prompt=$encodedPrompt&image_size=$imageSize"
+        // Build base URL
+        val baseUrl = "https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image"
+        var url = "$baseUrl?prompt=$encodedPrompt&image_size=$imageSize"
+
+        // If reference image is selected, encode it as base64 and add to URL
+        if (referenceImageUri != null) {
+            try {
+                val base64Image = encodeImageToBase64(referenceImageUri!!)
+                if (base64Image != null) {
+                    val encodedImage = java.net.URLEncoder.encode(base64Image, "UTF-8")
+                    url += "&image_url=$encodedImage"
+                }
+            } catch (e: Exception) {
+                handler.post {
+                    Toast.makeText(requireContext(), "读取参考图片失败: ${e.message}", Toast.LENGTH_SHORT).show()
+                    finishGeneration()
+                }
+                return
+            }
+        }
 
         val request = Request.Builder()
             .url(url)
@@ -313,11 +398,249 @@ class ImageFragment : Fragment() {
     }
 
     // ═══════════════════════════════════════════
+    //  Encode image to Base64
+    // ═══════════════════════════════════════════
+
+    private fun encodeImageToBase64(uri: Uri): String? {
+        val inputStream: InputStream = requireContext().contentResolver.openInputStream(uri)
+            ?: return null
+        val bytes = inputStream.use { it.readBytes() }
+        return Base64.encodeToString(bytes, Base64.NO_WRAP)
+    }
+
+    // ═══════════════════════════════════════════
+    //  Save Image to Gallery
+    // ═══════════════════════════════════════════
+
+    private fun saveImageToGallery(imageUrl: String) {
+        Thread {
+            try {
+                val bitmap = Glide.with(requireContext().applicationContext)
+                    .asBitmap()
+                    .load(imageUrl)
+                    .submit()
+                    .get()
+
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+                    val contentValues = ContentValues().apply {
+                        put(MediaStore.Images.Media.DISPLAY_NAME, "ai_image_${System.currentTimeMillis()}.jpg")
+                        put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
+                        put(MediaStore.Images.Media.RELATIVE_PATH, Environment.DIRECTORY_PICTURES + "/AI聚合助手")
+                        put(MediaStore.Images.Media.IS_PENDING, 1)
+                    }
+
+                    val uri = requireContext().contentResolver.insert(
+                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues
+                    )
+
+                    if (uri != null) {
+                        requireContext().contentResolver.openOutputStream(uri)?.use { outputStream ->
+                            bitmap.compress(Bitmap.CompressFormat.JPEG, 95, outputStream)
+                        }
+                        contentValues.clear()
+                        contentValues.put(MediaStore.Images.Media.IS_PENDING, 0)
+                        requireContext().contentResolver.update(uri, contentValues, null, null)
+
+                        handler.post {
+                            Toast.makeText(requireContext(), "已保存到相册", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                } else {
+                    val path = MediaStore.Images.Media.insertImage(
+                        requireContext().contentResolver,
+                        bitmap,
+                        "ai_image_${System.currentTimeMillis()}",
+                        "AI聚合助手生成"
+                    )
+                    handler.post {
+                        if (path != null) {
+                            Toast.makeText(requireContext(), "已保存到相册", Toast.LENGTH_SHORT).show()
+                        } else {
+                            Toast.makeText(requireContext(), "保存失败", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
+            } catch (e: Exception) {
+                handler.post {
+                    Toast.makeText(requireContext(), "保存失败: ${e.message}", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }.start()
+    }
+
+    // ═══════════════════════════════════════════
+    //  Share Image
+    // ═══════════════════════════════════════════
+
+    private fun shareImage(imageUrl: String) {
+        Thread {
+            try {
+                val bitmap = Glide.with(requireContext().applicationContext)
+                    .asBitmap()
+                    .load(imageUrl)
+                    .submit()
+                    .get()
+
+                val cacheDir = File(requireContext().cacheDir, "shared_images")
+                if (!cacheDir.exists()) cacheDir.mkdirs()
+                val file = File(cacheDir, "share_${System.currentTimeMillis()}.jpg")
+                FileOutputStream(file).use { outputStream ->
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 95, outputStream)
+                }
+
+                val uri = FileProvider.getUriForFile(
+                    requireContext(),
+                    "${requireContext().packageName}.fileprovider",
+                    file
+                )
+
+                handler.post {
+                    val shareIntent = Intent(Intent.ACTION_SEND).apply {
+                        type = "image/jpeg"
+                        putExtra(Intent.EXTRA_STREAM, uri)
+                        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                    }
+                    startActivity(Intent.createChooser(shareIntent, "分享图片"))
+                }
+            } catch (e: Exception) {
+                handler.post {
+                    Toast.makeText(requireContext(), "分享失败: ${e.message}", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }.start()
+    }
+
+    // ═══════════════════════════════════════════
+    //  Zoom Preview Dialog
+    // ═══════════════════════════════════════════
+
+    private fun showZoomPreview(imageUrl: String) {
+        val dialog = Dialog(requireContext(), android.R.style.Theme_Black_NoTitleBar_Fullscreen)
+        val zoomView = ZoomableImageView(requireContext())
+
+        dialog.setContentView(zoomView)
+        dialog.show()
+
+        Glide.with(requireContext())
+            .load(imageUrl)
+            .into(zoomView)
+    }
+
+    // ═══════════════════════════════════════════
+    //  ZoomableImageView (inner class)
+    // ═══════════════════════════════════════════
+
+    inner class ZoomableImageView(context: android.content.Context) : androidx.appcompat.widget.AppCompatImageView(context) {
+
+        private var scaleFactor = 1.0f
+        private val matrix = Matrix()
+        private val NONE = 0
+        private val DRAG = 1
+        private val ZOOM = 2
+        private var mode = NONE
+        private var lastTouchX = 0f
+        private var lastTouchY = 0f
+        private var startX = 0f
+        private var startY = 0f
+        private val minScale = 1.0f
+        private val maxScale = 5.0f
+
+        private val scaleDetector = ScaleGestureDetector(context, object : ScaleGestureDetector.SimpleOnScaleGestureListener() {
+            override fun onScaleBegin(detector: ScaleGestureDetector): Boolean {
+                mode = ZOOM
+                return true
+            }
+
+            override fun onScale(detector: ScaleGestureDetector): Boolean {
+                var scaleFactor = detector.scaleFactor
+                val currentScale = getCurrentScale()
+                if (currentScale * scaleFactor < minScale) {
+                    scaleFactor = minScale / currentScale
+                }
+                if (currentScale * scaleFactor > maxScale) {
+                    scaleFactor = maxScale / currentScale
+                }
+                matrix.postScale(scaleFactor, scaleFactor, detector.focusX, detector.focusY)
+                imageMatrix = matrix
+                return true
+            }
+        })
+
+        private val gestureDetector = GestureDetector(context, object : GestureDetector.SimpleOnGestureListener() {
+            override fun onDoubleTap(e: MotionEvent): Boolean {
+                val currentScale = getCurrentScale()
+                if (currentScale > minScale) {
+                    matrix.reset()
+                    imageMatrix = matrix
+                } else {
+                    matrix.postScale(2.0f, 2.0f, e.x, e.y)
+                    imageMatrix = matrix
+                }
+                return true
+            }
+
+            override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
+                // Close the dialog by finding the parent dialog
+                var parent = parent
+                while (parent != null) {
+                    if (parent is Dialog) {
+                        parent.dismiss()
+                        break
+                    }
+                    parent = (parent as? View)?.parent
+                }
+                return true
+            }
+        })
+
+        init {
+            scaleType = ScaleType.MATRIX
+            setBackgroundColor(android.graphics.Color.BLACK)
+            setOnTouchListener { _, event ->
+                scaleDetector.onTouchEvent(event)
+                gestureDetector.onTouchEvent(event)
+
+                when (event.actionMasked) {
+                    MotionEvent.ACTION_DOWN -> {
+                        mode = DRAG
+                        lastTouchX = event.x
+                        lastTouchY = event.y
+                    }
+                    MotionEvent.ACTION_MOVE -> {
+                        if (mode == DRAG) {
+                            val dx = event.x - lastTouchX
+                            val dy = event.y - lastTouchY
+                            matrix.postTranslate(dx, dy)
+                            imageMatrix = matrix
+                            lastTouchX = event.x
+                            lastTouchY = event.y
+                        }
+                    }
+                    MotionEvent.ACTION_UP, MotionEvent.ACTION_POINTER_UP -> {
+                        mode = NONE
+                    }
+                }
+                true
+            }
+        }
+
+        private fun getCurrentScale(): Float {
+            val values = FloatArray(9)
+            matrix.getValues(values)
+            return values[Matrix.MSCALE_X]
+        }
+    }
+
+    // ═══════════════════════════════════════════
     //  ImageAdapter
     // ═══════════════════════════════════════════
 
-    inner class ImageAdapter(private val images: List<String>) :
-        RecyclerView.Adapter<ImageAdapter.ViewHolder>() {
+    inner class ImageAdapter(
+        private val images: List<String>,
+        private val onSaveClick: (String) -> Unit,
+        private val onShareClick: (String) -> Unit,
+        private val onImageClick: (String) -> Unit
+    ) : RecyclerView.Adapter<ImageAdapter.ViewHolder>() {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
             val view = LayoutInflater.from(parent.context)
@@ -326,18 +649,25 @@ class ImageFragment : Fragment() {
         }
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+            val imageUrl = images[position]
             Glide.with(holder.imageView.context)
-                .load(images[position])
+                .load(imageUrl)
                 .placeholder(android.R.color.darker_gray)
                 .error(android.R.color.darker_gray)
                 .centerCrop()
                 .into(holder.imageView)
+
+            holder.imageView.setOnClickListener { onImageClick(imageUrl) }
+            holder.btnSave.setOnClickListener { onSaveClick(imageUrl) }
+            holder.btnShare.setOnClickListener { onShareClick(imageUrl) }
         }
 
         override fun getItemCount() = images.size
 
         inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
             val imageView: ImageView = view.findViewById(R.id.result_image)
+            val btnSave: Button = view.findViewById(R.id.btn_save_img)
+            val btnShare: Button = view.findViewById(R.id.btn_share_img)
         }
     }
 }

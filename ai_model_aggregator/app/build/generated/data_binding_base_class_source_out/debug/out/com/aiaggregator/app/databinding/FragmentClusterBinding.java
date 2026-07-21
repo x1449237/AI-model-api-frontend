@@ -26,6 +26,9 @@ public final class FragmentClusterBinding implements ViewBinding {
   private final LinearLayout rootView;
 
   @NonNull
+  public final MaterialButton btnClusterHistory;
+
+  @NonNull
   public final MaterialButton btnRunCluster;
 
   @NonNull
@@ -59,13 +62,14 @@ public final class FragmentClusterBinding implements ViewBinding {
   public final TextView statusText;
 
   private FragmentClusterBinding(@NonNull LinearLayout rootView,
-      @NonNull MaterialButton btnRunCluster, @NonNull RecyclerView clusterModelList,
-      @NonNull ProgressBar clusterProgress, @NonNull TextView clusterProgressText,
-      @NonNull TextInputEditText clusterPrompt, @NonNull TextInputLayout clusterPromptLayout,
-      @NonNull ScrollView clusterResultsArea, @NonNull LinearLayout clusterResultsContainer,
-      @NonNull LinearLayout clusterSelectArea, @NonNull LinearLayout clusterStatus,
-      @NonNull TextView statusText) {
+      @NonNull MaterialButton btnClusterHistory, @NonNull MaterialButton btnRunCluster,
+      @NonNull RecyclerView clusterModelList, @NonNull ProgressBar clusterProgress,
+      @NonNull TextView clusterProgressText, @NonNull TextInputEditText clusterPrompt,
+      @NonNull TextInputLayout clusterPromptLayout, @NonNull ScrollView clusterResultsArea,
+      @NonNull LinearLayout clusterResultsContainer, @NonNull LinearLayout clusterSelectArea,
+      @NonNull LinearLayout clusterStatus, @NonNull TextView statusText) {
     this.rootView = rootView;
+    this.btnClusterHistory = btnClusterHistory;
     this.btnRunCluster = btnRunCluster;
     this.clusterModelList = clusterModelList;
     this.clusterProgress = clusterProgress;
@@ -106,6 +110,12 @@ public final class FragmentClusterBinding implements ViewBinding {
     // This is done to optimize the compiled bytecode for size and performance.
     int id;
     missingId: {
+      id = R.id.btn_cluster_history;
+      MaterialButton btnClusterHistory = ViewBindings.findChildViewById(rootView, id);
+      if (btnClusterHistory == null) {
+        break missingId;
+      }
+
       id = R.id.btn_run_cluster;
       MaterialButton btnRunCluster = ViewBindings.findChildViewById(rootView, id);
       if (btnRunCluster == null) {
@@ -172,10 +182,10 @@ public final class FragmentClusterBinding implements ViewBinding {
         break missingId;
       }
 
-      return new FragmentClusterBinding((LinearLayout) rootView, btnRunCluster, clusterModelList,
-          clusterProgress, clusterProgressText, clusterPrompt, clusterPromptLayout,
-          clusterResultsArea, clusterResultsContainer, clusterSelectArea, clusterStatus,
-          statusText);
+      return new FragmentClusterBinding((LinearLayout) rootView, btnClusterHistory, btnRunCluster,
+          clusterModelList, clusterProgress, clusterProgressText, clusterPrompt,
+          clusterPromptLayout, clusterResultsArea, clusterResultsContainer, clusterSelectArea,
+          clusterStatus, statusText);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

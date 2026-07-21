@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.aiaggregator.app-mergeDebugResources-42:/values-pt-rPT/values-pt-rPT.xml",
+            "outputFile": "com.aiaggregator.app-mergeDebugResources-46:/values-pt-rPT/values-pt-rPT.xml",
             "map": [
                 {
                     "source": "/root/.gradle/caches/8.14.4/transforms/2181c6e6119e63950635a8b93fa74fd2/transformed/preference-1.2.1/res/values-pt-rPT/values-pt-rPT.xml",

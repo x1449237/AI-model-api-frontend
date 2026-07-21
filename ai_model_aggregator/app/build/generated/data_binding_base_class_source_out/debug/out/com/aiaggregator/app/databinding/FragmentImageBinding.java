@@ -4,7 +4,9 @@ package com.aiaggregator.app.databinding;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
@@ -25,7 +27,13 @@ public final class FragmentImageBinding implements ViewBinding {
   private final LinearLayout rootView;
 
   @NonNull
+  public final Button btnClearRefImage;
+
+  @NonNull
   public final MaterialButton btnGenerateImg;
+
+  @NonNull
+  public final MaterialButton btnSelectRefImage;
 
   @NonNull
   public final LinearLayout emptyImgState;
@@ -51,14 +59,20 @@ public final class FragmentImageBinding implements ViewBinding {
   @NonNull
   public final Spinner ratioSpinner;
 
-  private FragmentImageBinding(@NonNull LinearLayout rootView,
-      @NonNull MaterialButton btnGenerateImg, @NonNull LinearLayout emptyImgState,
-      @NonNull RecyclerView imgGrid, @NonNull LinearLayout imgModelChips,
-      @NonNull ProgressBar imgProgress, @NonNull TextInputEditText imgPromptInput,
-      @NonNull FrameLayout imgResultArea, @NonNull Spinner numSpinner,
-      @NonNull Spinner ratioSpinner) {
+  @NonNull
+  public final ImageView refImagePreview;
+
+  private FragmentImageBinding(@NonNull LinearLayout rootView, @NonNull Button btnClearRefImage,
+      @NonNull MaterialButton btnGenerateImg, @NonNull MaterialButton btnSelectRefImage,
+      @NonNull LinearLayout emptyImgState, @NonNull RecyclerView imgGrid,
+      @NonNull LinearLayout imgModelChips, @NonNull ProgressBar imgProgress,
+      @NonNull TextInputEditText imgPromptInput, @NonNull FrameLayout imgResultArea,
+      @NonNull Spinner numSpinner, @NonNull Spinner ratioSpinner,
+      @NonNull ImageView refImagePreview) {
     this.rootView = rootView;
+    this.btnClearRefImage = btnClearRefImage;
     this.btnGenerateImg = btnGenerateImg;
+    this.btnSelectRefImage = btnSelectRefImage;
     this.emptyImgState = emptyImgState;
     this.imgGrid = imgGrid;
     this.imgModelChips = imgModelChips;
@@ -67,6 +81,7 @@ public final class FragmentImageBinding implements ViewBinding {
     this.imgResultArea = imgResultArea;
     this.numSpinner = numSpinner;
     this.ratioSpinner = ratioSpinner;
+    this.refImagePreview = refImagePreview;
   }
 
   @Override
@@ -96,9 +111,21 @@ public final class FragmentImageBinding implements ViewBinding {
     // This is done to optimize the compiled bytecode for size and performance.
     int id;
     missingId: {
+      id = R.id.btn_clear_ref_image;
+      Button btnClearRefImage = ViewBindings.findChildViewById(rootView, id);
+      if (btnClearRefImage == null) {
+        break missingId;
+      }
+
       id = R.id.btn_generate_img;
       MaterialButton btnGenerateImg = ViewBindings.findChildViewById(rootView, id);
       if (btnGenerateImg == null) {
+        break missingId;
+      }
+
+      id = R.id.btn_select_ref_image;
+      MaterialButton btnSelectRefImage = ViewBindings.findChildViewById(rootView, id);
+      if (btnSelectRefImage == null) {
         break missingId;
       }
 
@@ -150,9 +177,15 @@ public final class FragmentImageBinding implements ViewBinding {
         break missingId;
       }
 
-      return new FragmentImageBinding((LinearLayout) rootView, btnGenerateImg, emptyImgState,
-          imgGrid, imgModelChips, imgProgress, imgPromptInput, imgResultArea, numSpinner,
-          ratioSpinner);
+      id = R.id.ref_image_preview;
+      ImageView refImagePreview = ViewBindings.findChildViewById(rootView, id);
+      if (refImagePreview == null) {
+        break missingId;
+      }
+
+      return new FragmentImageBinding((LinearLayout) rootView, btnClearRefImage, btnGenerateImg,
+          btnSelectRefImage, emptyImgState, imgGrid, imgModelChips, imgProgress, imgPromptInput,
+          imgResultArea, numSpinner, ratioSpinner, refImagePreview);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

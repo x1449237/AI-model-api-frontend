@@ -2,11 +2,15 @@ package com.aiaggregator.app.ui.code
 
 import android.content.ClipData
 import android.content.ClipboardManager
+import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
+import android.os.Environment
 import android.os.Handler
 import android.os.Looper
+import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -45,12 +49,13 @@ class CodeFragment : Fragment() {
         "Swift", "Kotlin", "PHP", "SQL", "HTML", "CSS", "Shell",
         "JSON", "XML", "YAML"
     )
-    private val extensions = mapOf(
-        "Python" to ".py", "Java" to ".java", "JavaScript" to ".js",
-        "C++" to ".cpp", "C" to ".c", "Go" to ".go", "Rust" to ".rs",
-        "Swift" to ".swift", "Kotlin" to ".kt", "PHP" to ".php",
-        "SQL" to ".sql", "HTML" to ".html", "CSS" to ".css",
-        "Shell" to ".sh", "JSON" to ".json", "XML" to ".xml", "YAML" to ".yaml"
+    private val languageExtensions = mapOf(
+        "C++" to "cpp", "C" to "c", "Java" to "java",
+        "Python" to "py", "JavaScript" to "js", "PHP" to "php",
+        "SQL" to "sql", "JSON" to "json", "HTML" to "html",
+        "CSS" to "css", "Go" to "go", "Rust" to "rs",
+        "Swift" to "swift", "Kotlin" to "kt", "Shell" to "sh",
+        "XML" to "xml", "YAML" to "yaml"
     )
 
     // ── View references ──
@@ -63,6 +68,7 @@ class CodeFragment : Fragment() {
     private lateinit var resultHeader: LinearLayout
     private lateinit var btnCopy: MaterialButton
     private lateinit var btnExport: MaterialButton
+    private lateinit var btnSaveLocal: MaterialButton
     private lateinit var codeOutputScroll: ScrollView
     private lateinit var codeOutput: TextView
     private lateinit var emptyState: LinearLayout
@@ -95,6 +101,7 @@ class CodeFragment : Fragment() {
         resultHeader = view.findViewById(R.id.result_header)
         btnCopy = view.findViewById(R.id.btn_copy)
         btnExport = view.findViewById(R.id.btn_export)
+        btnSaveLocal = view.findViewById(R.id.btn_save_local)
         codeOutputScroll = view.findViewById(R.id.code_output_scroll)
         codeOutput = view.findViewById(R.id.code_output)
         emptyState = view.findViewById(R.id.empty_state)
@@ -220,6 +227,7 @@ class CodeFragment : Fragment() {
         btnGenerate.setOnClickListener { generateCode() }
         btnCopy.setOnClickListener { copyCode() }
         btnExport.setOnClickListener { exportCode() }
+        btnSaveLocal.setOnClickListener { saveToLocal() }
     }
 
     // ═══════════════════════════════════════════
@@ -315,8 +323,8 @@ class CodeFragment : Fragment() {
             return
         }
         try {
-            val ext = extensions[selectedLanguage] ?: ".txt"
-            val file = File(requireContext().cacheDir, "generated_code$ext")
+            val ext = languageExtensions[selectedLanguage] ?: "txt"
+            val file = File(requireContext().cacheDir, "generated_code.$ext")
             file.writeText(generatedCode)
 
             val uri = FileProvider.getUriForFile(
@@ -332,6 +340,42 @@ class CodeFragment : Fragment() {
             startActivity(Intent.createChooser(shareIntent, "导出代码"))
         } catch (e: Exception) {
             Toast.makeText(requireContext(), "导出失败: ${e.message}", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun saveToLocal() {
+        val code = generatedCode
+        if (code.isEmpty()) {
+            Toast.makeText(requireContext(), "没有可保存的代码", Toast.LENGTH_SHORT).show()
+            return
+        }
+        val lang = selectedLanguage
+        val ext = languageExtensions[lang] ?: "txt"
+
+        try {
+            val filename = "generated_${System.currentTimeMillis()}.$ext"
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                val values = ContentValues().apply {
+                    put(MediaStore.Downloads.DISPLAY_NAME, filename)
+                    put(MediaStore.Downloads.MIME_TYPE, "text/plain")
+                    put(MediaStore.Downloads.RELATIVE_PATH, "Download/AI_Code")
+                }
+                val uri = requireContext().contentResolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, values)
+                uri?.let {
+                    requireContext().contentResolver.openOutputStream(it)?.use { os ->
+                        os.write(code.toByteArray())
+                    }
+                    Toast.makeText(requireContext(), "已保存到 Downloads/AI_Code/$filename", Toast.LENGTH_SHORT).show()
+                }
+            } else {
+                val dir = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "AI_Code")
+                dir.mkdirs()
+                val file = File(dir, filename)
+                file.writeText(code)
+                Toast.makeText(requireContext(), "已保存到 ${file.absolutePath}", Toast.LENGTH_SHORT).show()
+            }
+        } catch (e: Exception) {
+            Toast.makeText(requireContext(), "保存失败: ${e.message}", Toast.LENGTH_SHORT).show()
         }
     }
 }

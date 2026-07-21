@@ -3107,6 +3107,7 @@ drawable design_ic_visibility
 drawable design_ic_visibility_off
 drawable design_password_eye
 drawable design_snackbar_background
+drawable ic_add
 drawable ic_arrow_back_black_24
 drawable ic_arrow_down_24dp
 drawable ic_call_answer
@@ -3134,6 +3135,7 @@ drawable ic_mtrl_chip_checked_circle
 drawable ic_mtrl_chip_close_circle
 drawable ic_search_black_24
 drawable ic_send
+drawable ic_template
 drawable ic_tune
 drawable m3_avd_hide_password
 drawable m3_avd_show_password
@@ -3311,15 +3313,24 @@ id bounce
 id bounceBoth
 id bounceEnd
 id bounceStart
+id btn_clear_ref_image
+id btn_cluster_history
 id btn_copy
 id btn_export
 id btn_generate
 id btn_generate_img
+id btn_history
 id btn_model_selector
+id btn_new_chat
 id btn_params
 id btn_run_cluster
+id btn_save_img
+id btn_save_local
 id btn_select_model
+id btn_select_ref_image
 id btn_send
+id btn_share_img
+id btn_templates
 id bubble_card
 id bubble_container
 id bubble_text
@@ -3347,6 +3358,8 @@ id clip_horizontal
 id clip_vertical
 id clockwise
 id closest
+id cluster_mode_area
+id cluster_model_chips
 id cluster_model_list
 id cluster_progress
 id cluster_progress_text
@@ -3368,6 +3381,7 @@ id content
 id contentPanel
 id contiguous
 id continuousVelocity
+id conversation_title
 id coordinator
 id cos
 id counterclockwise
@@ -3526,7 +3540,6 @@ id message
 id middle
 id mini
 id model_avatar
-id model_chips_container
 id model_info
 id model_label
 id month_grid
@@ -3632,6 +3645,7 @@ id ratio
 id ratio_spinner
 id rectangles
 id recycler_view
+id ref_image_preview
 id report_drawn
 id result_header
 id result_image
@@ -3710,6 +3724,7 @@ id submenuarrow
 id submit_area
 id supportScrollUp
 id switchWidget
+id switch_cluster_mode
 id tabMode
 id tab_layout
 id tag_accessibility_actions

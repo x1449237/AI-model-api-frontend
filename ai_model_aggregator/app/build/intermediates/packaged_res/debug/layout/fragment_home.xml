@@ -6,39 +6,139 @@
     android:orientation="vertical"
     android:background="@color/colorBackground">
 
-    <!-- Top bar: model selector dropdown -->
-    <FrameLayout
+    <!-- Top bar: conversation title, buttons, model selector -->
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:background="@color/colorBackground">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:background="@color/colorBackground"
+        android:paddingHorizontal="8dp"
+        android:paddingVertical="4dp">
 
+        <!-- Conversation title -->
+        <TextView
+            android:id="@+id/conversation_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="新对话"
+            android:textSize="14sp"
+            android:textColor="@color/colorTextPrimary"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:paddingHorizontal="4dp" />
+
+        <!-- New chat button -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_new_chat"
+            style="@style/Widget.Material3.Button.TextButton"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:minWidth="0dp"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:contentDescription="新建对话"
+            app:icon="@drawable/ic_add"
+            app:iconSize="18dp"
+            app:iconTint="@color/colorTextSecondary"
+            app:rippleColor="@color/colorSurfaceVariant" />
+
+        <!-- History button -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_history"
+            style="@style/Widget.Material3.Button.TextButton"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:minWidth="0dp"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:contentDescription="对话历史"
+            app:icon="@drawable/ic_history"
+            app:iconSize="18dp"
+            app:iconTint="@color/colorTextSecondary"
+            app:rippleColor="@color/colorSurfaceVariant" />
+
+        <!-- Model selector button -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_model_selector"
             style="@style/Widget.Material3.Button.TextButton"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_vertical"
-            android:paddingHorizontal="16dp"
+            android:layout_height="36dp"
+            android:paddingHorizontal="8dp"
             android:text="选择模型"
             android:textColor="@color/colorTextSecondary"
-            android:textSize="14sp"
+            android:textSize="12sp"
             android:gravity="center_vertical"
+            android:maxLines="1"
+            android:ellipsize="end"
             app:icon="@android:drawable/arrow_down_float"
             app:iconGravity="end"
-            app:iconSize="16dp"
+            app:iconSize="14dp"
             app:iconTint="@color/colorTextSecondary"
             app:rippleColor="@color/colorPrimary" />
+    </LinearLayout>
 
-        <!-- Model chips container (hidden, replaced by dropdown) -->
-        <LinearLayout
-            android:id="@+id/model_chips_container"
+    <!-- Cluster mode bar -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:background="@color/colorBackground"
+        android:paddingHorizontal="12dp"
+        android:paddingVertical="2dp">
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="集群模式"
+            android:textSize="13sp"
+            android:textColor="@color/colorTextSecondary"
+            android:layout_marginEnd="4dp" />
+
+        <Switch
+            android:id="@+id/switch_cluster_mode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <!-- Cluster mode model selection area (hidden by default) -->
+    <LinearLayout
+        android:id="@+id/cluster_mode_area"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/colorSurface"
+        android:paddingHorizontal="12dp"
+        android:paddingVertical="6dp"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="选择要对比的模型（至少2个）："
+            android:textSize="12sp"
+            android:textColor="@color/colorTextSecondary"
+            android:paddingBottom="4dp" />
+
+        <HorizontalScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:paddingHorizontal="12dp"
-            android:visibility="gone" />
-    </FrameLayout>
+            android:layout_height="wrap_content"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:id="@+id/cluster_model_chips"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" />
+        </HorizontalScrollView>
+    </LinearLayout>
 
     <!-- Chat area -->
     <androidx.recyclerview.widget.RecyclerView
@@ -73,6 +173,20 @@
             app:iconTint="@color/colorTextSecondary"
             app:rippleColor="@color/colorSurfaceVariant"
             android:contentDescription="参数" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_templates"
+            style="@style/Widget.Material3.Button.TextButton"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:minWidth="0dp"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            app:icon="@drawable/ic_template"
+            app:iconSize="20dp"
+            app:iconTint="@color/colorTextSecondary"
+            app:rippleColor="@color/colorSurfaceVariant"
+            android:contentDescription="模板" />
 
         <com.google.android.material.card.MaterialCardView
             android:layout_width="0dp"
@@ -127,7 +241,7 @@
             android:contentDescription="发送" />
     </LinearLayout>
 
-    <!-- Hidden params panel (kept for backward compat, move to bottom sheet) -->
+    <!-- Hidden params panel (kept for backward compat) -->
     <LinearLayout
         android:id="@+id/params_panel"
         android:layout_width="match_parent"

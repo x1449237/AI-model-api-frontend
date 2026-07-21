@@ -129,6 +129,15 @@
             android:text="导出"
             android:textSize="12sp"
             android:textColor="@color/colorPrimary" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_save_local"
+            style="@style/Widget.Material3.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:text="保存到本地"
+            android:textSize="12sp"
+            android:textColor="@color/colorPrimary" />
     </LinearLayout>
 
     <!-- Code output area -->

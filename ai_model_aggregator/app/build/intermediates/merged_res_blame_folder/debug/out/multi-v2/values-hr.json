@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.aiaggregator.app-mergeDebugResources-42:/values-hr/values-hr.xml",
+            "outputFile": "com.aiaggregator.app-mergeDebugResources-46:/values-hr/values-hr.xml",
             "map": [
                 {
                     "source": "/root/.gradle/caches/8.14.4/transforms/3d2d7ccd648886586746368204b93475/transformed/core-1.12.0/res/values-hr/values-hr.xml",

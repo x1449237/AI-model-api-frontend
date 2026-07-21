@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
+import android.widget.Switch;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -24,7 +25,13 @@ public final class FragmentHomeBinding implements ViewBinding {
   private final LinearLayout rootView;
 
   @NonNull
+  public final MaterialButton btnHistory;
+
+  @NonNull
   public final MaterialButton btnModelSelector;
+
+  @NonNull
+  public final MaterialButton btnNewChat;
 
   @NonNull
   public final MaterialButton btnParams;
@@ -33,7 +40,19 @@ public final class FragmentHomeBinding implements ViewBinding {
   public final MaterialButton btnSend;
 
   @NonNull
+  public final MaterialButton btnTemplates;
+
+  @NonNull
   public final RecyclerView chatRecycler;
+
+  @NonNull
+  public final LinearLayout clusterModeArea;
+
+  @NonNull
+  public final LinearLayout clusterModelChips;
+
+  @NonNull
+  public final TextView conversationTitle;
 
   @NonNull
   public final EditText inputMessage;
@@ -45,10 +64,10 @@ public final class FragmentHomeBinding implements ViewBinding {
   public final TextView maxTokensValue;
 
   @NonNull
-  public final LinearLayout modelChipsContainer;
+  public final LinearLayout paramsPanel;
 
   @NonNull
-  public final LinearLayout paramsPanel;
+  public final Switch switchClusterMode;
 
   @NonNull
   public final SeekBar temperatureSlider;
@@ -65,24 +84,32 @@ public final class FragmentHomeBinding implements ViewBinding {
   @NonNull
   public final TextView toppValue;
 
-  private FragmentHomeBinding(@NonNull LinearLayout rootView,
-      @NonNull MaterialButton btnModelSelector, @NonNull MaterialButton btnParams,
-      @NonNull MaterialButton btnSend, @NonNull RecyclerView chatRecycler,
-      @NonNull EditText inputMessage, @NonNull SeekBar maxTokensSlider,
-      @NonNull TextView maxTokensValue, @NonNull LinearLayout modelChipsContainer,
-      @NonNull LinearLayout paramsPanel, @NonNull SeekBar temperatureSlider,
-      @NonNull TextView temperatureValue, @NonNull TextView tokenCounter,
-      @NonNull SeekBar toppSlider, @NonNull TextView toppValue) {
+  private FragmentHomeBinding(@NonNull LinearLayout rootView, @NonNull MaterialButton btnHistory,
+      @NonNull MaterialButton btnModelSelector, @NonNull MaterialButton btnNewChat,
+      @NonNull MaterialButton btnParams, @NonNull MaterialButton btnSend,
+      @NonNull MaterialButton btnTemplates, @NonNull RecyclerView chatRecycler,
+      @NonNull LinearLayout clusterModeArea, @NonNull LinearLayout clusterModelChips,
+      @NonNull TextView conversationTitle, @NonNull EditText inputMessage,
+      @NonNull SeekBar maxTokensSlider, @NonNull TextView maxTokensValue,
+      @NonNull LinearLayout paramsPanel, @NonNull Switch switchClusterMode,
+      @NonNull SeekBar temperatureSlider, @NonNull TextView temperatureValue,
+      @NonNull TextView tokenCounter, @NonNull SeekBar toppSlider, @NonNull TextView toppValue) {
     this.rootView = rootView;
+    this.btnHistory = btnHistory;
     this.btnModelSelector = btnModelSelector;
+    this.btnNewChat = btnNewChat;
     this.btnParams = btnParams;
     this.btnSend = btnSend;
+    this.btnTemplates = btnTemplates;
     this.chatRecycler = chatRecycler;
+    this.clusterModeArea = clusterModeArea;
+    this.clusterModelChips = clusterModelChips;
+    this.conversationTitle = conversationTitle;
     this.inputMessage = inputMessage;
     this.maxTokensSlider = maxTokensSlider;
     this.maxTokensValue = maxTokensValue;
-    this.modelChipsContainer = modelChipsContainer;
     this.paramsPanel = paramsPanel;
+    this.switchClusterMode = switchClusterMode;
     this.temperatureSlider = temperatureSlider;
     this.temperatureValue = temperatureValue;
     this.tokenCounter = tokenCounter;
@@ -117,9 +144,21 @@ public final class FragmentHomeBinding implements ViewBinding {
     // This is done to optimize the compiled bytecode for size and performance.
     int id;
     missingId: {
+      id = R.id.btn_history;
+      MaterialButton btnHistory = ViewBindings.findChildViewById(rootView, id);
+      if (btnHistory == null) {
+        break missingId;
+      }
+
       id = R.id.btn_model_selector;
       MaterialButton btnModelSelector = ViewBindings.findChildViewById(rootView, id);
       if (btnModelSelector == null) {
+        break missingId;
+      }
+
+      id = R.id.btn_new_chat;
+      MaterialButton btnNewChat = ViewBindings.findChildViewById(rootView, id);
+      if (btnNewChat == null) {
         break missingId;
       }
 
@@ -135,9 +174,33 @@ public final class FragmentHomeBinding implements ViewBinding {
         break missingId;
       }
 
+      id = R.id.btn_templates;
+      MaterialButton btnTemplates = ViewBindings.findChildViewById(rootView, id);
+      if (btnTemplates == null) {
+        break missingId;
+      }
+
       id = R.id.chat_recycler;
       RecyclerView chatRecycler = ViewBindings.findChildViewById(rootView, id);
       if (chatRecycler == null) {
+        break missingId;
+      }
+
+      id = R.id.cluster_mode_area;
+      LinearLayout clusterModeArea = ViewBindings.findChildViewById(rootView, id);
+      if (clusterModeArea == null) {
+        break missingId;
+      }
+
+      id = R.id.cluster_model_chips;
+      LinearLayout clusterModelChips = ViewBindings.findChildViewById(rootView, id);
+      if (clusterModelChips == null) {
+        break missingId;
+      }
+
+      id = R.id.conversation_title;
+      TextView conversationTitle = ViewBindings.findChildViewById(rootView, id);
+      if (conversationTitle == null) {
         break missingId;
       }
 
@@ -159,15 +222,15 @@ public final class FragmentHomeBinding implements ViewBinding {
         break missingId;
       }
 
-      id = R.id.model_chips_container;
-      LinearLayout modelChipsContainer = ViewBindings.findChildViewById(rootView, id);
-      if (modelChipsContainer == null) {
-        break missingId;
-      }
-
       id = R.id.params_panel;
       LinearLayout paramsPanel = ViewBindings.findChildViewById(rootView, id);
       if (paramsPanel == null) {
+        break missingId;
+      }
+
+      id = R.id.switch_cluster_mode;
+      Switch switchClusterMode = ViewBindings.findChildViewById(rootView, id);
+      if (switchClusterMode == null) {
         break missingId;
       }
 
@@ -201,9 +264,11 @@ public final class FragmentHomeBinding implements ViewBinding {
         break missingId;
       }
 
-      return new FragmentHomeBinding((LinearLayout) rootView, btnModelSelector, btnParams, btnSend,
-          chatRecycler, inputMessage, maxTokensSlider, maxTokensValue, modelChipsContainer,
-          paramsPanel, temperatureSlider, temperatureValue, tokenCounter, toppSlider, toppValue);
+      return new FragmentHomeBinding((LinearLayout) rootView, btnHistory, btnModelSelector,
+          btnNewChat, btnParams, btnSend, btnTemplates, chatRecycler, clusterModeArea,
+          clusterModelChips, conversationTitle, inputMessage, maxTokensSlider, maxTokensValue,
+          paramsPanel, switchClusterMode, temperatureSlider, temperatureValue, tokenCounter,
+          toppSlider, toppValue);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

@@ -10,6 +10,7 @@ import androidx.annotation.Nullable;
 import androidx.viewbinding.ViewBinding;
 import androidx.viewbinding.ViewBindings;
 import com.aiaggregator.app.R;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
 import java.lang.NullPointerException;
 import java.lang.Override;
@@ -20,11 +21,20 @@ public final class ItemImageResultBinding implements ViewBinding {
   private final MaterialCardView rootView;
 
   @NonNull
+  public final MaterialButton btnSaveImg;
+
+  @NonNull
+  public final MaterialButton btnShareImg;
+
+  @NonNull
   public final ImageView resultImage;
 
   private ItemImageResultBinding(@NonNull MaterialCardView rootView,
+      @NonNull MaterialButton btnSaveImg, @NonNull MaterialButton btnShareImg,
       @NonNull ImageView resultImage) {
     this.rootView = rootView;
+    this.btnSaveImg = btnSaveImg;
+    this.btnShareImg = btnShareImg;
     this.resultImage = resultImage;
   }
 
@@ -55,13 +65,26 @@ public final class ItemImageResultBinding implements ViewBinding {
     // This is done to optimize the compiled bytecode for size and performance.
     int id;
     missingId: {
+      id = R.id.btn_save_img;
+      MaterialButton btnSaveImg = ViewBindings.findChildViewById(rootView, id);
+      if (btnSaveImg == null) {
+        break missingId;
+      }
+
+      id = R.id.btn_share_img;
+      MaterialButton btnShareImg = ViewBindings.findChildViewById(rootView, id);
+      if (btnShareImg == null) {
+        break missingId;
+      }
+
       id = R.id.result_image;
       ImageView resultImage = ViewBindings.findChildViewById(rootView, id);
       if (resultImage == null) {
         break missingId;
       }
 
-      return new ItemImageResultBinding((MaterialCardView) rootView, resultImage);
+      return new ItemImageResultBinding((MaterialCardView) rootView, btnSaveImg, btnShareImg,
+          resultImage);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

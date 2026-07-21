@@ -1,5 +1,7 @@
 package com.aiaggregator.app.ui.cluster
 
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -14,12 +16,20 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.aiaggregator.app.R
 import com.aiaggregator.app.data.ApiService
+import com.aiaggregator.app.data.AppDatabase
+import com.aiaggregator.app.data.ClusterRecordEntity
 import com.aiaggregator.app.data.VendorConfig
 import com.aiaggregator.app.models.AiModel
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import kotlinx.coroutines.runBlocking
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class ClusterFragment : Fragment() {
 
@@ -27,6 +37,13 @@ class ClusterFragment : Fragment() {
     private val selectedModels = mutableSetOf<String>()
     private val handler = Handler(Looper.getMainLooper())
     private var isRunning = false
+
+    private val gson = Gson()
+    private val db by lazy { AppDatabase.getInstance(requireContext()) }
+    private val clusterRecordDao by lazy { db.clusterRecordDao() }
+
+    private var lastPrompt: String = ""
+    private var lastResults: List<ClusterResult>? = null
 
     private data class ClusterResult(
         val model: AiModel,
@@ -63,6 +80,7 @@ class ClusterFragment : Fragment() {
         }
 
         view.findViewById<MaterialButton>(R.id.btn_run_cluster).setOnClickListener { runCluster(view) }
+        view.findViewById<MaterialButton>(R.id.btn_cluster_history).setOnClickListener { showClusterHistory() }
     }
 
     private fun updateStatus(view: View) {
@@ -90,6 +108,7 @@ class ClusterFragment : Fragment() {
         }
         if (selectedModels.size < 2 || isRunning) return
 
+        lastPrompt = prompt
         val models = selectedModels.mapNotNull { VendorConfig.getModelById(it) }
         isRunning = true
 
@@ -128,6 +147,7 @@ class ClusterFragment : Fragment() {
                         if (completed == models.size) {
                             handler.post {
                                 showResults(view, results.sortedBy { it.responseTimeMs })
+                                saveClusterRecord()
                             }
                         }
                     }
@@ -143,6 +163,7 @@ class ClusterFragment : Fragment() {
                         if (completed == models.size) {
                             handler.post {
                                 showResults(view, results.sortedBy { it.responseTimeMs })
+                                saveClusterRecord()
                             }
                         }
                     }
@@ -151,7 +172,164 @@ class ClusterFragment : Fragment() {
         }
     }
 
+    private fun saveClusterRecord() {
+        if (lastPrompt.isEmpty()) return
+        val results = lastResults ?: return
+
+        val modelIds = gson.toJson(selectedModels.toList())
+        val resultsList = results.map { result ->
+            mapOf(
+                "modelName" to result.model.name,
+                "vendorName" to result.model.vendorName,
+                "content" to result.content,
+                "responseTimeMs" to result.responseTimeMs
+            )
+        }
+        val resultsJson = gson.toJson(resultsList)
+
+        Thread {
+            runBlocking {
+                clusterRecordDao.insertRecord(
+                    ClusterRecordEntity(
+                        prompt = lastPrompt,
+                        modelIds = modelIds,
+                        resultsJson = resultsJson
+                    )
+                )
+            }
+        }.start()
+    }
+
+    private fun showClusterHistory() {
+        val db = AppDatabase.getInstance(requireContext())
+        Thread {
+            val cursor = db.openHelper.readableDatabase.query(
+                "SELECT id, prompt, model_ids, results_json, created_at FROM cluster_records ORDER BY created_at DESC"
+            )
+            val records = mutableListOf<ClusterRecordEntity>()
+            while (cursor.moveToNext()) {
+                records.add(
+                    ClusterRecordEntity(
+                        id = cursor.getLong(cursor.getColumnIndexOrThrow("id")),
+                        prompt = cursor.getString(cursor.getColumnIndexOrThrow("prompt")),
+                        modelIds = cursor.getString(cursor.getColumnIndexOrThrow("model_ids")),
+                        resultsJson = cursor.getString(cursor.getColumnIndexOrThrow("results_json")),
+                        createdAt = cursor.getLong(cursor.getColumnIndexOrThrow("created_at"))
+                    )
+                )
+            }
+            cursor.close()
+
+            handler.post {
+                showClusterHistoryDialog(records)
+            }
+        }.start()
+    }
+
+    private fun showClusterHistoryDialog(records: List<ClusterRecordEntity>) {
+        if (records.isEmpty()) {
+            AlertDialog.Builder(requireContext())
+                .setTitle("历史记录")
+                .setMessage("暂无集群对比记录")
+                .setPositiveButton("确定", null)
+                .show()
+            return
+        }
+
+        val dateFormat = SimpleDateFormat("MM-dd HH:mm", Locale.getDefault())
+        val items = records.map { record ->
+            val preview = if (record.prompt.length > 30) record.prompt.take(30) + "..." else record.prompt
+            val date = dateFormat.format(Date(record.createdAt))
+            val modelCount = try {
+                val list = gson.fromJson<List<String>>(record.modelIds, object : TypeToken<List<String>>() {}.type)
+                list.size
+            } catch (e: Exception) {
+                0
+            }
+            "$preview\n$date · ${modelCount}个模型"
+        }.toTypedArray()
+
+        AlertDialog.Builder(requireContext())
+            .setTitle("集群对比历史")
+            .setItems(items) { _, which ->
+                showRecordDetail(records[which])
+            }
+            .setOnCancelListener { }
+            .show()
+    }
+
+    private fun showRecordDetail(record: ClusterRecordEntity) {
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+        val date = dateFormat.format(Date(record.createdAt))
+
+        val modelCount = try {
+            val list = gson.fromJson<List<String>>(record.modelIds, object : TypeToken<List<String>>() {}.type)
+            list.size
+        } catch (e: Exception) {
+            0
+        }
+
+        val resultsList = try {
+            gson.fromJson<List<Map<String, Any>>>(
+                record.resultsJson,
+                object : TypeToken<List<Map<String, Any>>>() {}.type
+            )
+        } catch (e: Exception) {
+            emptyList()
+        }
+
+        val sb = StringBuilder()
+        sb.append("问题：${record.prompt}\n\n")
+        sb.append("时间：$date\n")
+        sb.append("模型数：$modelCount\n\n")
+        sb.append("━━━ 各模型响应 ━━━\n\n")
+
+        resultsList.forEachIndexed { index, result ->
+            val modelName = result["modelName"] as? String ?: "未知"
+            val vendorName = result["vendorName"] as? String ?: "未知"
+            val content = result["content"] as? String ?: ""
+            val responseTime = (result["responseTimeMs"] as? Double)?.toLong() ?: 0L
+
+            sb.append("【${index + 1}】$vendorName · $modelName")
+            if (responseTime > 0) {
+                sb.append(" (${responseTime}ms)")
+            }
+            sb.append("\n")
+            sb.append(content)
+            sb.append("\n\n")
+        }
+
+        AlertDialog.Builder(requireContext())
+            .setTitle("记录详情")
+            .setMessage(sb.toString())
+            .setPositiveButton("关闭", null)
+            .setNegativeButton("删除") { _, _ ->
+                deleteClusterRecord(record)
+            }
+            .show()
+    }
+
+    private fun deleteClusterRecord(record: ClusterRecordEntity) {
+        AlertDialog.Builder(requireContext())
+            .setTitle("确认删除")
+            .setMessage("确定要删除这条集群对比记录吗？")
+            .setPositiveButton("删除") { _, _ ->
+                Thread {
+                    runBlocking {
+                        clusterRecordDao.deleteRecord(record)
+                    }
+                    handler.post {
+                        Toast.makeText(requireContext(), "已删除", Toast.LENGTH_SHORT).show()
+                    }
+                }.start()
+            }
+            .setNegativeButton("取消", null)
+            .show()
+    }
+
     private fun showResults(view: View, results: List<ClusterResult>) {
+        lastResults = results
+
         view.findViewById<ProgressBar>(R.id.cluster_progress).visibility = View.GONE
         view.findViewById<TextView>(R.id.cluster_progress_text).visibility = View.GONE
 
