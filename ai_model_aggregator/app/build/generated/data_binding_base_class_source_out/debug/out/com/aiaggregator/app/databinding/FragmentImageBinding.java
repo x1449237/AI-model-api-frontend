@@ -4,8 +4,6 @@ package com.aiaggregator.app.databinding;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -16,6 +14,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewbinding.ViewBinding;
 import androidx.viewbinding.ViewBindings;
 import com.aiaggregator.app.R;
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.textfield.TextInputEditText;
 import java.lang.NullPointerException;
 import java.lang.Override;
 import java.lang.String;
@@ -25,7 +25,7 @@ public final class FragmentImageBinding implements ViewBinding {
   private final LinearLayout rootView;
 
   @NonNull
-  public final Button btnGenerateImg;
+  public final MaterialButton btnGenerateImg;
 
   @NonNull
   public final LinearLayout emptyImgState;
@@ -40,7 +40,7 @@ public final class FragmentImageBinding implements ViewBinding {
   public final ProgressBar imgProgress;
 
   @NonNull
-  public final EditText imgPromptInput;
+  public final TextInputEditText imgPromptInput;
 
   @NonNull
   public final FrameLayout imgResultArea;
@@ -51,11 +51,12 @@ public final class FragmentImageBinding implements ViewBinding {
   @NonNull
   public final Spinner ratioSpinner;
 
-  private FragmentImageBinding(@NonNull LinearLayout rootView, @NonNull Button btnGenerateImg,
-      @NonNull LinearLayout emptyImgState, @NonNull RecyclerView imgGrid,
-      @NonNull LinearLayout imgModelChips, @NonNull ProgressBar imgProgress,
-      @NonNull EditText imgPromptInput, @NonNull FrameLayout imgResultArea,
-      @NonNull Spinner numSpinner, @NonNull Spinner ratioSpinner) {
+  private FragmentImageBinding(@NonNull LinearLayout rootView,
+      @NonNull MaterialButton btnGenerateImg, @NonNull LinearLayout emptyImgState,
+      @NonNull RecyclerView imgGrid, @NonNull LinearLayout imgModelChips,
+      @NonNull ProgressBar imgProgress, @NonNull TextInputEditText imgPromptInput,
+      @NonNull FrameLayout imgResultArea, @NonNull Spinner numSpinner,
+      @NonNull Spinner ratioSpinner) {
     this.rootView = rootView;
     this.btnGenerateImg = btnGenerateImg;
     this.emptyImgState = emptyImgState;
@@ -96,7 +97,7 @@ public final class FragmentImageBinding implements ViewBinding {
     int id;
     missingId: {
       id = R.id.btn_generate_img;
-      Button btnGenerateImg = ViewBindings.findChildViewById(rootView, id);
+      MaterialButton btnGenerateImg = ViewBindings.findChildViewById(rootView, id);
       if (btnGenerateImg == null) {
         break missingId;
       }
@@ -126,7 +127,7 @@ public final class FragmentImageBinding implements ViewBinding {
       }
 
       id = R.id.img_prompt_input;
-      EditText imgPromptInput = ViewBindings.findChildViewById(rootView, id);
+      TextInputEditText imgPromptInput = ViewBindings.findChildViewById(rootView, id);
       if (imgPromptInput == null) {
         break missingId;
       }

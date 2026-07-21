@@ -1,38 +1,42 @@
 [
     {
-        "merged": "com.aiaggregator.app-mergeDebugResources-43:/layout/item_cluster_model.xml",
-        "source": "com.aiaggregator.app-main-46:/layout/item_cluster_model.xml"
+        "merged": "/root/.gradle/daemon/8.14.4/com.aiaggregator.app-mergeDebugResources-43:/layout/fragment_history.xml",
+        "source": "/root/.gradle/daemon/8.14.4/com.aiaggregator.app-main-46:/layout/fragment_history.xml"
     },
     {
-        "merged": "com.aiaggregator.app-mergeDebugResources-43:/layout/activity_main.xml",
-        "source": "com.aiaggregator.app-main-46:/layout/activity_main.xml"
+        "merged": "/root/.gradle/daemon/8.14.4/com.aiaggregator.app-mergeDebugResources-43:/layout/item_image_result.xml",
+        "source": "/root/.gradle/daemon/8.14.4/com.aiaggregator.app-main-46:/layout/item_image_result.xml"
     },
     {
-        "merged": "com.aiaggregator.app-mergeDebugResources-43:/layout/fragment_cluster.xml",
-        "source": "com.aiaggregator.app-main-46:/layout/fragment_cluster.xml"
+        "merged": "/root/.gradle/daemon/8.14.4/com.aiaggregator.app-mergeDebugResources-43:/layout/fragment_home.xml",
+        "source": "/root/.gradle/daemon/8.14.4/com.aiaggregator.app-main-46:/layout/fragment_home.xml"
     },
     {
-        "merged": "com.aiaggregator.app-mergeDebugResources-43:/layout/fragment_history.xml",
-        "source": "com.aiaggregator.app-main-46:/layout/fragment_history.xml"
+        "merged": "/root/.gradle/daemon/8.14.4/com.aiaggregator.app-mergeDebugResources-43:/layout/fragment_cluster.xml",
+        "source": "/root/.gradle/daemon/8.14.4/com.aiaggregator.app-main-46:/layout/fragment_cluster.xml"
     },
     {
-        "merged": "com.aiaggregator.app-mergeDebugResources-43:/layout/fragment_image.xml",
-        "source": "com.aiaggregator.app-main-46:/layout/fragment_image.xml"
+        "merged": "/root/.gradle/daemon/8.14.4/com.aiaggregator.app-mergeDebugResources-43:/layout/activity_main.xml",
+        "source": "/root/.gradle/daemon/8.14.4/com.aiaggregator.app-main-46:/layout/activity_main.xml"
     },
     {
-        "merged": "com.aiaggregator.app-mergeDebugResources-43:/layout/item_image_result.xml",
-        "source": "com.aiaggregator.app-main-46:/layout/item_image_result.xml"
+        "merged": "/root/.gradle/daemon/8.14.4/com.aiaggregator.app-mergeDebugResources-43:/layout/item_cluster_model.xml",
+        "source": "/root/.gradle/daemon/8.14.4/com.aiaggregator.app-main-46:/layout/item_cluster_model.xml"
+    },
+    {
+        "merged": "/root/.gradle/daemon/8.14.4/com.aiaggregator.app-mergeDebugResources-43:/layout/fragment_code.xml",
+        "source": "/root/.gradle/daemon/8.14.4/com.aiaggregator.app-main-46:/layout/fragment_code.xml"
     },
     {
         "merged": "com.aiaggregator.app-mergeDebugResources-43:/layout/fragment_code.xml",
         "source": "com.aiaggregator.app-main-46:/layout/fragment_code.xml"
     },
     {
-        "merged": "com.aiaggregator.app-mergeDebugResources-43:/layout/item_chat_message.xml",
-        "source": "com.aiaggregator.app-main-46:/layout/item_chat_message.xml"
+        "merged": "/root/.gradle/daemon/8.14.4/com.aiaggregator.app-mergeDebugResources-43:/layout/fragment_image.xml",
+        "source": "/root/.gradle/daemon/8.14.4/com.aiaggregator.app-main-46:/layout/fragment_image.xml"
     },
     {
-        "merged": "com.aiaggregator.app-mergeDebugResources-43:/layout/fragment_home.xml",
-        "source": "com.aiaggregator.app-main-46:/layout/fragment_home.xml"
+        "merged": "/root/.gradle/daemon/8.14.4/com.aiaggregator.app-mergeDebugResources-43:/layout/item_chat_message.xml",
+        "source": "/root/.gradle/daemon/8.14.4/com.aiaggregator.app-main-46:/layout/item_chat_message.xml"
     }
 ]

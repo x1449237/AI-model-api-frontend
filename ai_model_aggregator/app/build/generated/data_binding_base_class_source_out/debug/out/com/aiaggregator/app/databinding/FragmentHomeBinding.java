@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -15,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewbinding.ViewBinding;
 import androidx.viewbinding.ViewBindings;
 import com.aiaggregator.app.R;
+import com.google.android.material.button.MaterialButton;
 import java.lang.NullPointerException;
 import java.lang.Override;
 import java.lang.String;
@@ -24,10 +24,13 @@ public final class FragmentHomeBinding implements ViewBinding {
   private final LinearLayout rootView;
 
   @NonNull
-  public final ImageButton btnParams;
+  public final MaterialButton btnModelSelector;
 
   @NonNull
-  public final ImageButton btnSend;
+  public final MaterialButton btnParams;
+
+  @NonNull
+  public final MaterialButton btnSend;
 
   @NonNull
   public final RecyclerView chatRecycler;
@@ -54,19 +57,24 @@ public final class FragmentHomeBinding implements ViewBinding {
   public final TextView temperatureValue;
 
   @NonNull
+  public final TextView tokenCounter;
+
+  @NonNull
   public final SeekBar toppSlider;
 
   @NonNull
   public final TextView toppValue;
 
-  private FragmentHomeBinding(@NonNull LinearLayout rootView, @NonNull ImageButton btnParams,
-      @NonNull ImageButton btnSend, @NonNull RecyclerView chatRecycler,
+  private FragmentHomeBinding(@NonNull LinearLayout rootView,
+      @NonNull MaterialButton btnModelSelector, @NonNull MaterialButton btnParams,
+      @NonNull MaterialButton btnSend, @NonNull RecyclerView chatRecycler,
       @NonNull EditText inputMessage, @NonNull SeekBar maxTokensSlider,
       @NonNull TextView maxTokensValue, @NonNull LinearLayout modelChipsContainer,
       @NonNull LinearLayout paramsPanel, @NonNull SeekBar temperatureSlider,
-      @NonNull TextView temperatureValue, @NonNull SeekBar toppSlider,
-      @NonNull TextView toppValue) {
+      @NonNull TextView temperatureValue, @NonNull TextView tokenCounter,
+      @NonNull SeekBar toppSlider, @NonNull TextView toppValue) {
     this.rootView = rootView;
+    this.btnModelSelector = btnModelSelector;
     this.btnParams = btnParams;
     this.btnSend = btnSend;
     this.chatRecycler = chatRecycler;
@@ -77,6 +85,7 @@ public final class FragmentHomeBinding implements ViewBinding {
     this.paramsPanel = paramsPanel;
     this.temperatureSlider = temperatureSlider;
     this.temperatureValue = temperatureValue;
+    this.tokenCounter = tokenCounter;
     this.toppSlider = toppSlider;
     this.toppValue = toppValue;
   }
@@ -108,14 +117,20 @@ public final class FragmentHomeBinding implements ViewBinding {
     // This is done to optimize the compiled bytecode for size and performance.
     int id;
     missingId: {
+      id = R.id.btn_model_selector;
+      MaterialButton btnModelSelector = ViewBindings.findChildViewById(rootView, id);
+      if (btnModelSelector == null) {
+        break missingId;
+      }
+
       id = R.id.btn_params;
-      ImageButton btnParams = ViewBindings.findChildViewById(rootView, id);
+      MaterialButton btnParams = ViewBindings.findChildViewById(rootView, id);
       if (btnParams == null) {
         break missingId;
       }
 
       id = R.id.btn_send;
-      ImageButton btnSend = ViewBindings.findChildViewById(rootView, id);
+      MaterialButton btnSend = ViewBindings.findChildViewById(rootView, id);
       if (btnSend == null) {
         break missingId;
       }
@@ -168,6 +183,12 @@ public final class FragmentHomeBinding implements ViewBinding {
         break missingId;
       }
 
+      id = R.id.token_counter;
+      TextView tokenCounter = ViewBindings.findChildViewById(rootView, id);
+      if (tokenCounter == null) {
+        break missingId;
+      }
+
       id = R.id.topp_slider;
       SeekBar toppSlider = ViewBindings.findChildViewById(rootView, id);
       if (toppSlider == null) {
@@ -180,9 +201,9 @@ public final class FragmentHomeBinding implements ViewBinding {
         break missingId;
       }
 
-      return new FragmentHomeBinding((LinearLayout) rootView, btnParams, btnSend, chatRecycler,
-          inputMessage, maxTokensSlider, maxTokensValue, modelChipsContainer, paramsPanel,
-          temperatureSlider, temperatureValue, toppSlider, toppValue);
+      return new FragmentHomeBinding((LinearLayout) rootView, btnModelSelector, btnParams, btnSend,
+          chatRecycler, inputMessage, maxTokensSlider, maxTokensValue, modelChipsContainer,
+          paramsPanel, temperatureSlider, temperatureValue, tokenCounter, toppSlider, toppValue);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

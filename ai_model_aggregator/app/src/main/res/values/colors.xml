@@ -1,20 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Primary brand -->
     <color name="colorPrimary">#4A90D9</color>
     <color name="colorPrimaryDark">#3A7BC8</color>
-    <color name="colorAccent">#6C5CE7</color>
-    <color name="colorBackground">#F5F7FA</color>
-    <color name="colorSurface">#FFFFFF</color>
-    <color name="colorOnSurface">#333333</color>
-    <color name="colorTextSecondary">#999999</color>
-    <color name="colorDivider">#EEEEEE</color>
-    <color name="colorChipBg">#F0F2F5</color>
-    <color name="colorTagBlue">#E8F0FE</color>
-    <color name="colorTagBlueText">#1A5BA0</color>
-    <color name="colorTagOrange">#FFF3E0</color>
-    <color name="colorTagOrangeText">#E65100</color>
+    <color name="colorAccent">#4A90D9</color>
+
+    <!-- Dark backgrounds -->
+    <color name="colorBackground">#1A1A1A</color>
+    <color name="colorSurface">#212121</color>
+    <color name="colorSurfaceVariant">#2D2D2D</color>
+    <color name="colorSurfaceLight">#333333</color>
+
+    <!-- Text -->
+    <color name="colorOnSurface">#E0E0E0</color>
+    <color name="colorTextPrimary">#FFFFFF</color>
+    <color name="colorTextSecondary">#B0B0B0</color>
+    <color name="colorTextHint">#888888</color>
+    <color name="colorTextWhite">#FFFFFF</color>
+
+    <!-- Divider -->
+    <color name="colorDivider">#3A3A3A</color>
+
+    <!-- Chips -->
+    <color name="colorChipBg">#2D2D2D</color>
+    <color name="colorChipSelected">#4A90D9</color>
+    <color name="colorChipSelectedText">#FFFFFF</color>
+    <color name="colorChipUnselectedText">#B0B0B0</color>
+
+    <!-- Tags -->
+    <color name="colorTagBlue">#1A3A5C</color>
+    <color name="colorTagBlueText">#4A90D9</color>
+    <color name="colorTagOrange">#3D2E1A</color>
+    <color name="colorTagOrangeText">#FF9800</color>
+
+    <!-- Chat bubbles -->
     <color name="colorUserBubble">#4A90D9</color>
-    <color name="colorAiBubble">#FFFFFF</color>
+    <color name="colorUserBubbleText">#FFFFFF</color>
+    <color name="colorAiBubble">#2D2D2D</color>
+    <color name="colorAiBubbleText">#E0E0E0</color>
+
+    <!-- Code -->
     <color name="colorCodeBg">#1E1E1E</color>
     <color name="colorCodeText">#D4D4D4</color>
+
+    <!-- Misc -->
+    <color name="colorInputBg">#2D2D2D</color>
+    <color name="colorInputStroke">#3A3A3A</color>
+    <color name="colorSendButton">#4A90D9</color>
+    <color name="colorTokenCounter">#888888</color>
+    <color name="colorCopyButton">#B0B0B0</color>
+    <color name="colorModelLabel">#888888</color>
+    <color name="colorResponseTime">#888888</color>
+    <color name="colorProgressTrack">#3A3A3A</color>
+    <color name="colorCheckbox">#4A90D9</color>
+    <color name="colorBottomNavBg">#1A1A1A</color>
 </resources>

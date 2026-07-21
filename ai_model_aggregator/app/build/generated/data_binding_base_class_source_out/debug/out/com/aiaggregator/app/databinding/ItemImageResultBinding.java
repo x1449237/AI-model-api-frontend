@@ -4,32 +4,33 @@ package com.aiaggregator.app.databinding;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.viewbinding.ViewBinding;
 import androidx.viewbinding.ViewBindings;
 import com.aiaggregator.app.R;
+import com.google.android.material.card.MaterialCardView;
 import java.lang.NullPointerException;
 import java.lang.Override;
 import java.lang.String;
 
 public final class ItemImageResultBinding implements ViewBinding {
   @NonNull
-  private final FrameLayout rootView;
+  private final MaterialCardView rootView;
 
   @NonNull
   public final ImageView resultImage;
 
-  private ItemImageResultBinding(@NonNull FrameLayout rootView, @NonNull ImageView resultImage) {
+  private ItemImageResultBinding(@NonNull MaterialCardView rootView,
+      @NonNull ImageView resultImage) {
     this.rootView = rootView;
     this.resultImage = resultImage;
   }
 
   @Override
   @NonNull
-  public FrameLayout getRoot() {
+  public MaterialCardView getRoot() {
     return rootView;
   }
 
@@ -60,7 +61,7 @@ public final class ItemImageResultBinding implements ViewBinding {
         break missingId;
       }
 
-      return new ItemImageResultBinding((FrameLayout) rootView, resultImage);
+      return new ItemImageResultBinding((MaterialCardView) rootView, resultImage);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

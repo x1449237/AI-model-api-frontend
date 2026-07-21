@@ -40,6 +40,10 @@
         "source": "/root/.gradle/daemon/8.14.4/com.aiaggregator.app-main-46:/layout/item_chat_message.xml"
     },
     {
+        "merged": "com.aiaggregator.app-merged_res-44:/layout_fragment_code.xml.flat",
+        "source": "com.aiaggregator.app-main-46:/layout/fragment_code.xml"
+    },
+    {
         "merged": "/root/.gradle/daemon/8.14.4/com.aiaggregator.app-merged_res-44:/color_bottom_nav_color.xml.flat",
         "source": "/root/.gradle/daemon/8.14.4/com.aiaggregator.app-main-46:/color/bottom_nav_color.xml"
     },
@@ -68,12 +72,12 @@
         "source": "/root/.gradle/daemon/8.14.4/com.aiaggregator.app-main-46:/layout/fragment_history.xml"
     },
     {
-        "merged": "/root/.gradle/daemon/8.14.4/com.aiaggregator.app-merged_res-44:/layout_activity_main.xml.flat",
-        "source": "/root/.gradle/daemon/8.14.4/com.aiaggregator.app-main-46:/layout/activity_main.xml"
-    },
-    {
         "merged": "/root/.gradle/daemon/8.14.4/com.aiaggregator.app-merged_res-44:/layout_fragment_code.xml.flat",
         "source": "/root/.gradle/daemon/8.14.4/com.aiaggregator.app-main-46:/layout/fragment_code.xml"
+    },
+    {
+        "merged": "/root/.gradle/daemon/8.14.4/com.aiaggregator.app-merged_res-44:/layout_activity_main.xml.flat",
+        "source": "/root/.gradle/daemon/8.14.4/com.aiaggregator.app-main-46:/layout/activity_main.xml"
     },
     {
         "merged": "/root/.gradle/daemon/8.14.4/com.aiaggregator.app-merged_res-44:/drawable_ic_chat.xml.flat",
@@ -96,20 +100,16 @@
         "source": "/root/.gradle/daemon/8.14.4/com.aiaggregator.app-main-46:/drawable/ic_launcher_foreground.xml"
     },
     {
-        "merged": "/root/.gradle/daemon/8.14.4/com.aiaggregator.app-merged_res-44:/mipmap-hdpi_ic_launcher.xml.flat",
-        "source": "/root/.gradle/daemon/8.14.4/com.aiaggregator.app-main-46:/mipmap-hdpi/ic_launcher.xml"
-    },
-    {
         "merged": "/root/.gradle/daemon/8.14.4/com.aiaggregator.app-merged_res-44:/drawable_ic_compare.xml.flat",
         "source": "/root/.gradle/daemon/8.14.4/com.aiaggregator.app-main-46:/drawable/ic_compare.xml"
     },
     {
-        "merged": "/root/.gradle/daemon/8.14.4/com.aiaggregator.app-merged_res-44:/drawable_bg_rank_silver.xml.flat",
-        "source": "/root/.gradle/daemon/8.14.4/com.aiaggregator.app-main-46:/drawable/bg_rank_silver.xml"
-    },
-    {
         "merged": "/root/.gradle/daemon/8.14.4/com.aiaggregator.app-merged_res-44:/drawable_bg_avatar_small.xml.flat",
         "source": "/root/.gradle/daemon/8.14.4/com.aiaggregator.app-main-46:/drawable/bg_avatar_small.xml"
+    },
+    {
+        "merged": "/root/.gradle/daemon/8.14.4/com.aiaggregator.app-merged_res-44:/drawable_bg_rank_silver.xml.flat",
+        "source": "/root/.gradle/daemon/8.14.4/com.aiaggregator.app-main-46:/drawable/bg_rank_silver.xml"
     },
     {
         "merged": "/root/.gradle/daemon/8.14.4/com.aiaggregator.app-merged_res-44:/drawable_ic_history.xml.flat",

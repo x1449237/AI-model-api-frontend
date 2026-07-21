@@ -29,7 +29,8 @@ data class ChatMessage(
     val modelName: String,
     val vendorName: String,
     val timestamp: Long = System.currentTimeMillis(),
-    val responseTimeMs: Long = 0
+    val responseTimeMs: Long = 0,
+    val tokenCount: Int = 0
 )
 
 data class Conversation(

@@ -5,20 +5,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.viewbinding.ViewBinding;
 import androidx.viewbinding.ViewBindings;
 import com.aiaggregator.app.R;
+import com.google.android.material.card.MaterialCardView;
 import java.lang.NullPointerException;
 import java.lang.Override;
 import java.lang.String;
 
 public final class ItemClusterModelBinding implements ViewBinding {
   @NonNull
-  private final LinearLayout rootView;
+  private final MaterialCardView rootView;
 
   @NonNull
   public final CheckBox cbModel;
@@ -32,7 +32,7 @@ public final class ItemClusterModelBinding implements ViewBinding {
   @NonNull
   public final TextView tvVendorName;
 
-  private ItemClusterModelBinding(@NonNull LinearLayout rootView, @NonNull CheckBox cbModel,
+  private ItemClusterModelBinding(@NonNull MaterialCardView rootView, @NonNull CheckBox cbModel,
       @NonNull TextView tvModelName, @NonNull TextView tvTags, @NonNull TextView tvVendorName) {
     this.rootView = rootView;
     this.cbModel = cbModel;
@@ -43,7 +43,7 @@ public final class ItemClusterModelBinding implements ViewBinding {
 
   @Override
   @NonNull
-  public LinearLayout getRoot() {
+  public MaterialCardView getRoot() {
     return rootView;
   }
 
@@ -92,7 +92,7 @@ public final class ItemClusterModelBinding implements ViewBinding {
         break missingId;
       }
 
-      return new ItemClusterModelBinding((LinearLayout) rootView, cbModel, tvModelName, tvTags,
+      return new ItemClusterModelBinding((MaterialCardView) rootView, cbModel, tvModelName, tvTags,
           tvVendorName);
     }
     String missingId = rootView.getResources().getResourceName(id);

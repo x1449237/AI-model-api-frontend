@@ -10,27 +10,68 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.Button
+import android.widget.EditText
+import android.widget.LinearLayout
+import android.widget.ProgressBar
+import android.widget.ScrollView
+import android.widget.TextView
+import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import com.aiaggregator.app.R
 import com.aiaggregator.app.data.ApiService
 import com.aiaggregator.app.data.VendorConfig
 import com.aiaggregator.app.models.AiModel
+import com.aiaggregator.app.models.Vendor
+import com.google.android.material.button.MaterialButton
 import com.google.android.material.chip.Chip
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import java.io.File
 
 class CodeFragment : Fragment() {
+
     private lateinit var apiService: ApiService
     private var selectedModel: AiModel? = null
     private var selectedLanguage = "Python"
     private var generatedCode = ""
+    private var isGenerating = false
     private val handler = Handler(Looper.getMainLooper())
 
-    private val languages = listOf("Python", "Java", "JavaScript", "C++", "C", "Go", "Rust", "Swift", "Kotlin", "PHP", "SQL", "HTML", "CSS", "Shell", "JSON", "XML", "YAML")
-    private val extensions = mapOf("Python" to ".py", "Java" to ".java", "JavaScript" to ".js", "C++" to ".cpp", "C" to ".c", "Go" to ".go", "Rust" to ".rs", "Swift" to ".swift", "Kotlin" to ".kt", "PHP" to ".php", "SQL" to ".sql", "HTML" to ".html", "CSS" to ".css", "Shell" to ".sh", "JSON" to ".json", "XML" to ".xml", "YAML" to ".yaml")
+    private val languages = listOf(
+        "Python", "Java", "JavaScript", "C++", "C", "Go", "Rust",
+        "Swift", "Kotlin", "PHP", "SQL", "HTML", "CSS", "Shell",
+        "JSON", "XML", "YAML"
+    )
+    private val extensions = mapOf(
+        "Python" to ".py", "Java" to ".java", "JavaScript" to ".js",
+        "C++" to ".cpp", "C" to ".c", "Go" to ".go", "Rust" to ".rs",
+        "Swift" to ".swift", "Kotlin" to ".kt", "PHP" to ".php",
+        "SQL" to ".sql", "HTML" to ".html", "CSS" to ".css",
+        "Shell" to ".sh", "JSON" to ".json", "XML" to ".xml", "YAML" to ".yaml"
+    )
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    // ── View references ──
+    private lateinit var langChipsContainer: LinearLayout
+    private lateinit var btnSelectModel: MaterialButton
+    private lateinit var selectedModelText: TextView
+    private lateinit var codeDescInput: TextInputEditText
+    private lateinit var btnGenerate: MaterialButton
+    private lateinit var progressBar: ProgressBar
+    private lateinit var resultHeader: LinearLayout
+    private lateinit var btnCopy: MaterialButton
+    private lateinit var btnExport: MaterialButton
+    private lateinit var codeOutputScroll: ScrollView
+    private lateinit var codeOutput: TextView
+    private lateinit var emptyState: LinearLayout
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         return inflater.inflate(R.layout.fragment_code, container, false)
     }
 
@@ -38,59 +79,189 @@ class CodeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         apiService = ApiService(requireContext())
 
-        setupLanguageChips(view)
-        view.findViewById<Button>(R.id.btn_select_model).setOnClickListener { showModelPicker() }
-        view.findViewById<Button>(R.id.btn_generate).setOnClickListener { generateCode(view) }
-        view.findViewById<Button>(R.id.btn_copy).setOnClickListener { copyCode() }
-        view.findViewById<Button>(R.id.btn_export).setOnClickListener { exportCode() }
+        bindViews(view)
+        setupLanguageChips()
+        setupModelSelector()
+        setupButtons()
     }
 
-    private fun setupLanguageChips(view: View) {
-        val container = view.findViewById<LinearLayout>(R.id.lang_chips)
+    private fun bindViews(view: View) {
+        langChipsContainer = view.findViewById(R.id.lang_chips)
+        btnSelectModel = view.findViewById(R.id.btn_select_model)
+        selectedModelText = view.findViewById(R.id.selected_model_text)
+        codeDescInput = view.findViewById(R.id.code_desc_input)
+        btnGenerate = view.findViewById(R.id.btn_generate)
+        progressBar = view.findViewById(R.id.progress_bar)
+        resultHeader = view.findViewById(R.id.result_header)
+        btnCopy = view.findViewById(R.id.btn_copy)
+        btnExport = view.findViewById(R.id.btn_export)
+        codeOutputScroll = view.findViewById(R.id.code_output_scroll)
+        codeOutput = view.findViewById(R.id.code_output)
+        emptyState = view.findViewById(R.id.empty_state)
+    }
+
+    // ═══════════════════════════════════════════
+    //  Language Chips
+    // ═══════════════════════════════════════════
+
+    private fun setupLanguageChips() {
+        val ctx = requireContext()
         languages.forEach { lang ->
-            val chip = Chip(requireContext()).apply {
+            val chip = Chip(ctx).apply {
                 text = lang
                 isCheckable = true
                 isChecked = lang == selectedLanguage
+                chipBackgroundColor = ContextCompat.getColorStateList(ctx, R.color.colorChipBg)
+                setTextColor(
+                    ContextCompat.getColorStateList(
+                        ctx,
+                        if (lang == selectedLanguage) R.color.colorChipSelectedText
+                        else R.color.colorChipUnselectedText
+                    )
+                )
                 setOnClickListener {
                     selectedLanguage = lang
-                    // Update all chips
-                    for (i in 0 until container.childCount) {
-                        (container.getChildAt(i) as? Chip)?.isChecked = container.getChildAt(i) == this
-                    }
+                    refreshChipStates()
                 }
             }
-            container.addView(chip)
+            langChipsContainer.addView(chip)
         }
     }
 
-    private fun showModelPicker() {
-        val models = VendorConfig.getCodeModels()
-        val names = models.map { "${it.vendorName} - ${it.name}" }.toTypedArray()
+    private fun refreshChipStates() {
+        val ctx = requireContext()
+        for (i in 0 until langChipsContainer.childCount) {
+            val chip = langChipsContainer.getChildAt(i) as? Chip ?: continue
+            val isSelected = chip.text == selectedLanguage
+            chip.isChecked = isSelected
+            chip.chipBackgroundColor = ContextCompat.getColorStateList(ctx, R.color.colorChipBg)
+            chip.setTextColor(
+                ContextCompat.getColorStateList(
+                    ctx,
+                    if (isSelected) R.color.colorChipSelectedText else R.color.colorChipUnselectedText
+                )
+            )
+        }
+    }
+
+    // ═══════════════════════════════════════════
+    //  Model Selector (vendor → model, like Home)
+    // ═══════════════════════════════════════════
+
+    private fun setupModelSelector() {
+        btnSelectModel.setOnClickListener { showVendorPicker() }
+    }
+
+    private fun showVendorPicker() {
+        val vendors = VendorConfig.vendors
+        val names = vendors.map { "${it.name} (${it.nameEn})" }.toTypedArray()
+
         androidx.appcompat.app.AlertDialog.Builder(requireContext())
-            .setTitle("选择代码模型")
+            .setTitle("选择厂商")
             .setItems(names) { _, which ->
-                selectedModel = models[which]
-                view?.findViewById<TextView>(R.id.selected_model_text)?.text = "${selectedModel?.vendorName} - ${selectedModel?.name}"
+                showModelPicker(vendors[which])
             }
+            .setNegativeButton("取消", null)
             .show()
     }
 
-    private fun generateCode(view: View) {
-        val desc = view.findViewById<EditText>(R.id.code_desc_input).text.toString().trim()
-        if (desc.isEmpty() || selectedModel == null) {
-            Toast.makeText(requireContext(), "请选择模型并输入需求描述", Toast.LENGTH_SHORT).show()
+    private fun showModelPicker(vendor: Vendor) {
+        val models = VendorConfig.modelsByVendor[vendor.id]
+            ?.filter { it.supportsCode }
+            ?: emptyList()
+
+        if (models.isEmpty()) {
+            Toast.makeText(requireContext(), "${vendor.name} 暂无可用代码模型", Toast.LENGTH_SHORT).show()
             return
         }
 
-        view.findViewById<View>(R.id.empty_state).visibility = View.GONE
-        view.findViewById<View>(R.id.code_output_scroll).visibility = View.VISIBLE
-        view.findViewById<View>(R.id.result_header).visibility = View.VISIBLE
-        val output = view.findViewById<TextView>(R.id.code_output)
-        output.text = "正在生成..."
+        val names = models.mapIndexed { _, m ->
+            val badge = when {
+                m.isLatest && m.isBestPerformance -> " ⭐最新·最强"
+                m.isLatest -> " ⭐最新"
+                m.isBestPerformance -> " 最强"
+                else -> ""
+            }
+            "${m.name}$badge"
+        }.toTypedArray()
+
+        androidx.appcompat.app.AlertDialog.Builder(requireContext())
+            .setTitle("${vendor.name} 模型")
+            .setItems(names) { _, which ->
+                selectedModel = models[which]
+                updateModelButton()
+            }
+            .setNegativeButton("返回", null)
+            .show()
+    }
+
+    private fun updateModelButton() {
+        val model = selectedModel
+        if (model != null) {
+            btnSelectModel.text = "${model.vendorName} · ${model.name}"
+            btnSelectModel.setTextColor(
+                ContextCompat.getColor(requireContext(), R.color.colorPrimary)
+            )
+            selectedModelText.text = "${model.vendorName} - ${model.name}"
+        } else {
+            btnSelectModel.text = "选择模型"
+            btnSelectModel.setTextColor(
+                ContextCompat.getColor(requireContext(), R.color.colorTextSecondary)
+            )
+            selectedModelText.text = "未选择模型"
+        }
+    }
+
+    // ═══════════════════════════════════════════
+    //  Buttons
+    // ═══════════════════════════════════════════
+
+    private fun setupButtons() {
+        btnGenerate.setOnClickListener { generateCode() }
+        btnCopy.setOnClickListener { copyCode() }
+        btnExport.setOnClickListener { exportCode() }
+    }
+
+    // ═══════════════════════════════════════════
+    //  Code Generation
+    // ═══════════════════════════════════════════
+
+    private fun generateCode() {
+        val desc = codeDescInput.text.toString().trim()
+        if (desc.isEmpty()) {
+            Toast.makeText(requireContext(), "请输入代码需求描述", Toast.LENGTH_SHORT).show()
+            return
+        }
+        if (selectedModel == null) {
+            Toast.makeText(requireContext(), "请先选择模型", Toast.LENGTH_SHORT).show()
+            return
+        }
+        if (isGenerating) return
+
+        isGenerating = true
         generatedCode = ""
 
-        val prompt = "你是一个专业的${selectedLanguage}程序员。请根据以下需求生成代码：\n\n需求：$desc\n\n要求：\n1. 只输出代码，不要包含额外的解释文字\n2. 代码要完整可运行\n3. 添加必要的注释\n4. 遵循${selectedLanguage}的最佳实践\n\n请生成代码："
+        emptyState.visibility = View.GONE
+        codeOutputScroll.visibility = View.VISIBLE
+        resultHeader.visibility = View.VISIBLE
+        codeOutput.text = "正在生成 ${selectedLanguage} 代码..."
+        btnGenerate.isEnabled = false
+        btnGenerate.text = "生成中..."
+        progressBar.visibility = View.VISIBLE
+
+        val prompt = buildString {
+            appendLine("你是一个专业的${selectedLanguage}程序员。请根据以下需求生成代码：")
+            appendLine()
+            appendLine("需求：$desc")
+            appendLine()
+            appendLine("要求：")
+            appendLine("1. 只输出代码，不要包含额外的解释文字")
+            appendLine("2. 代码要完整可运行")
+            appendLine("3. 添加必要的注释")
+            appendLine("4. 遵循${selectedLanguage}的最佳实践")
+            appendLine()
+            appendLine("请生成代码：")
+        }
 
         apiService.sendMessage(
             model = selectedModel!!,
@@ -99,33 +270,60 @@ class CodeFragment : Fragment() {
             maxTokens = 4096,
             onChunk = { chunk ->
                 generatedCode += chunk
-                handler.post { output.text = generatedCode }
+                handler.post { codeOutput.text = generatedCode }
             },
             onComplete = { response ->
                 if (generatedCode.isEmpty()) generatedCode = response
-                handler.post { output.text = generatedCode }
+                handler.post {
+                    codeOutput.text = generatedCode
+                    finishGeneration()
+                }
             },
             onError = { error ->
-                handler.post { output.text = "生成失败: $error" }
+                handler.post {
+                    codeOutput.text = "生成失败: $error"
+                    finishGeneration()
+                }
             }
         )
     }
 
+    private fun finishGeneration() {
+        isGenerating = false
+        btnGenerate.isEnabled = true
+        btnGenerate.text = "生成代码"
+        progressBar.visibility = View.GONE
+    }
+
+    // ═══════════════════════════════════════════
+    //  Copy & Export
+    // ═══════════════════════════════════════════
+
     private fun copyCode() {
-        if (generatedCode.isEmpty()) return
+        if (generatedCode.isEmpty()) {
+            Toast.makeText(requireContext(), "没有可复制的代码", Toast.LENGTH_SHORT).show()
+            return
+        }
         val clipboard = requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-        clipboard.setPrimaryClip(ClipData.newPlainText("code", generatedCode))
+        clipboard.setPrimaryClip(ClipData.newPlainText("generated_code", generatedCode))
         Toast.makeText(requireContext(), "代码已复制到剪贴板", Toast.LENGTH_SHORT).show()
     }
 
     private fun exportCode() {
-        if (generatedCode.isEmpty()) return
+        if (generatedCode.isEmpty()) {
+            Toast.makeText(requireContext(), "没有可导出的代码", Toast.LENGTH_SHORT).show()
+            return
+        }
         try {
             val ext = extensions[selectedLanguage] ?: ".txt"
             val file = File(requireContext().cacheDir, "generated_code$ext")
             file.writeText(generatedCode)
 
-            val uri = FileProvider.getUriForFile(requireContext(), "${requireContext().packageName}.fileprovider", file)
+            val uri = FileProvider.getUriForFile(
+                requireContext(),
+                "${requireContext().packageName}.fileprovider",
+                file
+            )
             val shareIntent = Intent(Intent.ACTION_SEND).apply {
                 type = "text/plain"
                 putExtra(Intent.EXTRA_STREAM, uri)

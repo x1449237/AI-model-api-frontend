@@ -8,10 +8,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.cardview.widget.CardView;
 import androidx.viewbinding.ViewBinding;
 import androidx.viewbinding.ViewBindings;
 import com.aiaggregator.app.R;
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.card.MaterialCardView;
 import java.lang.NullPointerException;
 import java.lang.Override;
 import java.lang.String;
@@ -21,7 +22,10 @@ public final class ItemChatMessageBinding implements ViewBinding {
   private final LinearLayout rootView;
 
   @NonNull
-  public final CardView bubbleCard;
+  public final MaterialButton btnCopy;
+
+  @NonNull
+  public final MaterialCardView bubbleCard;
 
   @NonNull
   public final LinearLayout bubbleContainer;
@@ -38,17 +42,22 @@ public final class ItemChatMessageBinding implements ViewBinding {
   @NonNull
   public final LinearLayout modelLabel;
 
-  private ItemChatMessageBinding(@NonNull LinearLayout rootView, @NonNull CardView bubbleCard,
-      @NonNull LinearLayout bubbleContainer, @NonNull TextView bubbleText,
-      @NonNull TextView modelAvatar, @NonNull TextView modelInfo,
-      @NonNull LinearLayout modelLabel) {
+  @NonNull
+  public final TextView tokenInfo;
+
+  private ItemChatMessageBinding(@NonNull LinearLayout rootView, @NonNull MaterialButton btnCopy,
+      @NonNull MaterialCardView bubbleCard, @NonNull LinearLayout bubbleContainer,
+      @NonNull TextView bubbleText, @NonNull TextView modelAvatar, @NonNull TextView modelInfo,
+      @NonNull LinearLayout modelLabel, @NonNull TextView tokenInfo) {
     this.rootView = rootView;
+    this.btnCopy = btnCopy;
     this.bubbleCard = bubbleCard;
     this.bubbleContainer = bubbleContainer;
     this.bubbleText = bubbleText;
     this.modelAvatar = modelAvatar;
     this.modelInfo = modelInfo;
     this.modelLabel = modelLabel;
+    this.tokenInfo = tokenInfo;
   }
 
   @Override
@@ -78,8 +87,14 @@ public final class ItemChatMessageBinding implements ViewBinding {
     // This is done to optimize the compiled bytecode for size and performance.
     int id;
     missingId: {
+      id = R.id.btn_copy;
+      MaterialButton btnCopy = ViewBindings.findChildViewById(rootView, id);
+      if (btnCopy == null) {
+        break missingId;
+      }
+
       id = R.id.bubble_card;
-      CardView bubbleCard = ViewBindings.findChildViewById(rootView, id);
+      MaterialCardView bubbleCard = ViewBindings.findChildViewById(rootView, id);
       if (bubbleCard == null) {
         break missingId;
       }
@@ -114,8 +129,14 @@ public final class ItemChatMessageBinding implements ViewBinding {
         break missingId;
       }
 
-      return new ItemChatMessageBinding((LinearLayout) rootView, bubbleCard, bubbleContainer,
-          bubbleText, modelAvatar, modelInfo, modelLabel);
+      id = R.id.token_info;
+      TextView tokenInfo = ViewBindings.findChildViewById(rootView, id);
+      if (tokenInfo == null) {
+        break missingId;
+      }
+
+      return new ItemChatMessageBinding((LinearLayout) rootView, btnCopy, bubbleCard,
+          bubbleContainer, bubbleText, modelAvatar, modelInfo, modelLabel, tokenInfo);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

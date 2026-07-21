@@ -4,8 +4,6 @@ package com.aiaggregator.app.databinding;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
@@ -16,6 +14,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewbinding.ViewBinding;
 import androidx.viewbinding.ViewBindings;
 import com.aiaggregator.app.R;
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import java.lang.NullPointerException;
 import java.lang.Override;
 import java.lang.String;
@@ -25,7 +26,7 @@ public final class FragmentClusterBinding implements ViewBinding {
   private final LinearLayout rootView;
 
   @NonNull
-  public final Button btnRunCluster;
+  public final MaterialButton btnRunCluster;
 
   @NonNull
   public final RecyclerView clusterModelList;
@@ -34,7 +35,13 @@ public final class FragmentClusterBinding implements ViewBinding {
   public final ProgressBar clusterProgress;
 
   @NonNull
-  public final EditText clusterPrompt;
+  public final TextView clusterProgressText;
+
+  @NonNull
+  public final TextInputEditText clusterPrompt;
+
+  @NonNull
+  public final TextInputLayout clusterPromptLayout;
 
   @NonNull
   public final ScrollView clusterResultsArea;
@@ -51,16 +58,20 @@ public final class FragmentClusterBinding implements ViewBinding {
   @NonNull
   public final TextView statusText;
 
-  private FragmentClusterBinding(@NonNull LinearLayout rootView, @NonNull Button btnRunCluster,
-      @NonNull RecyclerView clusterModelList, @NonNull ProgressBar clusterProgress,
-      @NonNull EditText clusterPrompt, @NonNull ScrollView clusterResultsArea,
-      @NonNull LinearLayout clusterResultsContainer, @NonNull LinearLayout clusterSelectArea,
-      @NonNull LinearLayout clusterStatus, @NonNull TextView statusText) {
+  private FragmentClusterBinding(@NonNull LinearLayout rootView,
+      @NonNull MaterialButton btnRunCluster, @NonNull RecyclerView clusterModelList,
+      @NonNull ProgressBar clusterProgress, @NonNull TextView clusterProgressText,
+      @NonNull TextInputEditText clusterPrompt, @NonNull TextInputLayout clusterPromptLayout,
+      @NonNull ScrollView clusterResultsArea, @NonNull LinearLayout clusterResultsContainer,
+      @NonNull LinearLayout clusterSelectArea, @NonNull LinearLayout clusterStatus,
+      @NonNull TextView statusText) {
     this.rootView = rootView;
     this.btnRunCluster = btnRunCluster;
     this.clusterModelList = clusterModelList;
     this.clusterProgress = clusterProgress;
+    this.clusterProgressText = clusterProgressText;
     this.clusterPrompt = clusterPrompt;
+    this.clusterPromptLayout = clusterPromptLayout;
     this.clusterResultsArea = clusterResultsArea;
     this.clusterResultsContainer = clusterResultsContainer;
     this.clusterSelectArea = clusterSelectArea;
@@ -96,7 +107,7 @@ public final class FragmentClusterBinding implements ViewBinding {
     int id;
     missingId: {
       id = R.id.btn_run_cluster;
-      Button btnRunCluster = ViewBindings.findChildViewById(rootView, id);
+      MaterialButton btnRunCluster = ViewBindings.findChildViewById(rootView, id);
       if (btnRunCluster == null) {
         break missingId;
       }
@@ -113,9 +124,21 @@ public final class FragmentClusterBinding implements ViewBinding {
         break missingId;
       }
 
+      id = R.id.cluster_progress_text;
+      TextView clusterProgressText = ViewBindings.findChildViewById(rootView, id);
+      if (clusterProgressText == null) {
+        break missingId;
+      }
+
       id = R.id.cluster_prompt;
-      EditText clusterPrompt = ViewBindings.findChildViewById(rootView, id);
+      TextInputEditText clusterPrompt = ViewBindings.findChildViewById(rootView, id);
       if (clusterPrompt == null) {
+        break missingId;
+      }
+
+      id = R.id.cluster_prompt_layout;
+      TextInputLayout clusterPromptLayout = ViewBindings.findChildViewById(rootView, id);
+      if (clusterPromptLayout == null) {
         break missingId;
       }
 
@@ -150,8 +173,9 @@ public final class FragmentClusterBinding implements ViewBinding {
       }
 
       return new FragmentClusterBinding((LinearLayout) rootView, btnRunCluster, clusterModelList,
-          clusterProgress, clusterPrompt, clusterResultsArea, clusterResultsContainer,
-          clusterSelectArea, clusterStatus, statusText);
+          clusterProgress, clusterProgressText, clusterPrompt, clusterPromptLayout,
+          clusterResultsArea, clusterResultsContainer, clusterSelectArea, clusterStatus,
+          statusText);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

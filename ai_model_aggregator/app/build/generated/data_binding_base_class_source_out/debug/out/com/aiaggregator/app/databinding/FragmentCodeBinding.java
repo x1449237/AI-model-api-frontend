@@ -4,9 +4,8 @@ package com.aiaggregator.app.databinding;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
@@ -14,6 +13,8 @@ import androidx.annotation.Nullable;
 import androidx.viewbinding.ViewBinding;
 import androidx.viewbinding.ViewBindings;
 import com.aiaggregator.app.R;
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.textfield.TextInputEditText;
 import java.lang.NullPointerException;
 import java.lang.Override;
 import java.lang.String;
@@ -23,19 +24,19 @@ public final class FragmentCodeBinding implements ViewBinding {
   private final LinearLayout rootView;
 
   @NonNull
-  public final Button btnCopy;
+  public final MaterialButton btnCopy;
 
   @NonNull
-  public final Button btnExport;
+  public final MaterialButton btnExport;
 
   @NonNull
-  public final Button btnGenerate;
+  public final MaterialButton btnGenerate;
 
   @NonNull
-  public final Button btnSelectModel;
+  public final MaterialButton btnSelectModel;
 
   @NonNull
-  public final EditText codeDescInput;
+  public final TextInputEditText codeDescInput;
 
   @NonNull
   public final TextView codeOutput;
@@ -44,10 +45,13 @@ public final class FragmentCodeBinding implements ViewBinding {
   public final ScrollView codeOutputScroll;
 
   @NonNull
-  public final TextView emptyState;
+  public final LinearLayout emptyState;
 
   @NonNull
   public final LinearLayout langChips;
+
+  @NonNull
+  public final ProgressBar progressBar;
 
   @NonNull
   public final LinearLayout resultHeader;
@@ -55,11 +59,12 @@ public final class FragmentCodeBinding implements ViewBinding {
   @NonNull
   public final TextView selectedModelText;
 
-  private FragmentCodeBinding(@NonNull LinearLayout rootView, @NonNull Button btnCopy,
-      @NonNull Button btnExport, @NonNull Button btnGenerate, @NonNull Button btnSelectModel,
-      @NonNull EditText codeDescInput, @NonNull TextView codeOutput,
-      @NonNull ScrollView codeOutputScroll, @NonNull TextView emptyState,
-      @NonNull LinearLayout langChips, @NonNull LinearLayout resultHeader,
+  private FragmentCodeBinding(@NonNull LinearLayout rootView, @NonNull MaterialButton btnCopy,
+      @NonNull MaterialButton btnExport, @NonNull MaterialButton btnGenerate,
+      @NonNull MaterialButton btnSelectModel, @NonNull TextInputEditText codeDescInput,
+      @NonNull TextView codeOutput, @NonNull ScrollView codeOutputScroll,
+      @NonNull LinearLayout emptyState, @NonNull LinearLayout langChips,
+      @NonNull ProgressBar progressBar, @NonNull LinearLayout resultHeader,
       @NonNull TextView selectedModelText) {
     this.rootView = rootView;
     this.btnCopy = btnCopy;
@@ -71,6 +76,7 @@ public final class FragmentCodeBinding implements ViewBinding {
     this.codeOutputScroll = codeOutputScroll;
     this.emptyState = emptyState;
     this.langChips = langChips;
+    this.progressBar = progressBar;
     this.resultHeader = resultHeader;
     this.selectedModelText = selectedModelText;
   }
@@ -103,31 +109,31 @@ public final class FragmentCodeBinding implements ViewBinding {
     int id;
     missingId: {
       id = R.id.btn_copy;
-      Button btnCopy = ViewBindings.findChildViewById(rootView, id);
+      MaterialButton btnCopy = ViewBindings.findChildViewById(rootView, id);
       if (btnCopy == null) {
         break missingId;
       }
 
       id = R.id.btn_export;
-      Button btnExport = ViewBindings.findChildViewById(rootView, id);
+      MaterialButton btnExport = ViewBindings.findChildViewById(rootView, id);
       if (btnExport == null) {
         break missingId;
       }
 
       id = R.id.btn_generate;
-      Button btnGenerate = ViewBindings.findChildViewById(rootView, id);
+      MaterialButton btnGenerate = ViewBindings.findChildViewById(rootView, id);
       if (btnGenerate == null) {
         break missingId;
       }
 
       id = R.id.btn_select_model;
-      Button btnSelectModel = ViewBindings.findChildViewById(rootView, id);
+      MaterialButton btnSelectModel = ViewBindings.findChildViewById(rootView, id);
       if (btnSelectModel == null) {
         break missingId;
       }
 
       id = R.id.code_desc_input;
-      EditText codeDescInput = ViewBindings.findChildViewById(rootView, id);
+      TextInputEditText codeDescInput = ViewBindings.findChildViewById(rootView, id);
       if (codeDescInput == null) {
         break missingId;
       }
@@ -145,7 +151,7 @@ public final class FragmentCodeBinding implements ViewBinding {
       }
 
       id = R.id.empty_state;
-      TextView emptyState = ViewBindings.findChildViewById(rootView, id);
+      LinearLayout emptyState = ViewBindings.findChildViewById(rootView, id);
       if (emptyState == null) {
         break missingId;
       }
@@ -153,6 +159,12 @@ public final class FragmentCodeBinding implements ViewBinding {
       id = R.id.lang_chips;
       LinearLayout langChips = ViewBindings.findChildViewById(rootView, id);
       if (langChips == null) {
+        break missingId;
+      }
+
+      id = R.id.progress_bar;
+      ProgressBar progressBar = ViewBindings.findChildViewById(rootView, id);
+      if (progressBar == null) {
         break missingId;
       }
 
@@ -170,7 +182,7 @@ public final class FragmentCodeBinding implements ViewBinding {
 
       return new FragmentCodeBinding((LinearLayout) rootView, btnCopy, btnExport, btnGenerate,
           btnSelectModel, codeDescInput, codeOutput, codeOutputScroll, emptyState, langChips,
-          resultHeader, selectedModelText);
+          progressBar, resultHeader, selectedModelText);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

@@ -1,32 +1,152 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/colorBackground">
 
-    <HorizontalScrollView android:layout_width="match_parent" android:layout_height="48dp" android:background="@color/colorSurface" android:scrollbars="none">
-        <LinearLayout android:id="@+id/img_model_chips" android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="horizontal" android:paddingHorizontal="12dp" android:gravity="center_vertical" />
+    <!-- Model selector chips -->
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@color/colorSurface"
+        android:scrollbars="none">
+        <LinearLayout
+            android:id="@+id/img_model_chips"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:paddingHorizontal="12dp"
+            android:gravity="center_vertical" />
     </HorizontalScrollView>
 
-    <LinearLayout android:layout_width="match_parent" android:layout_height="44dp" android:background="@color/colorSurface" android:gravity="center_vertical" android:paddingHorizontal="12dp">
-        <TextView android:text="比例:" android:textSize="13sp" android:textColor="@color/colorTextSecondary" />
-        <Spinner android:id="@+id/ratio_spinner" android:layout_width="120dp" android:layout_height="wrap_content" android:entries="@array/image_ratios" />
+    <!-- Ratio and count selectors -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:background="@color/colorSurface"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="12dp">
+
+        <TextView
+            android:text="比例:"
+            android:textSize="13sp"
+            android:textColor="@color/colorTextSecondary"
+            android:layout_marginEnd="6dp" />
+
+        <Spinner
+            android:id="@+id/ratio_spinner"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:entries="@array/image_ratios"
+            android:background="@drawable/bg_input"
+            android:popupBackground="@color/colorSurface"
+            android:dropDownVerticalOffset="4dp" />
+
         <View android:layout_width="0dp" android:layout_height="0dp" android:layout_weight="1" />
-        <TextView android:text="数量:" android:textSize="13sp" android:textColor="@color/colorTextSecondary" />
-        <Spinner android:id="@+id/num_spinner" android:layout_width="80dp" android:layout_height="wrap_content" android:entries="@array/image_counts" />
+
+        <TextView
+            android:text="数量:"
+            android:textSize="13sp"
+            android:textColor="@color/colorTextSecondary"
+            android:layout_marginEnd="6dp" />
+
+        <Spinner
+            android:id="@+id/num_spinner"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:entries="@array/image_counts"
+            android:background="@drawable/bg_input"
+            android:popupBackground="@color/colorSurface"
+            android:dropDownVerticalOffset="4dp" />
     </LinearLayout>
 
-    <EditText android:id="@+id/img_prompt_input" android:layout_width="match_parent" android:layout_height="wrap_content" android:minHeight="80dp" android:background="@color/colorSurface" android:padding="16dp" android:hint="描述你想要生成的图片..." android:textSize="14sp" android:gravity="top" android:inputType="textMultiLine" />
+    <!-- Prompt input -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="12dp"
+        app:boxBackgroundColor="@color/colorSurfaceVariant"
+        app:boxCornerRadiusBottomEnd="12dp"
+        app:boxCornerRadiusBottomStart="12dp"
+        app:boxCornerRadiusTopEnd="12dp"
+        app:boxCornerRadiusTopStart="12dp"
+        app:hintTextColor="@color/colorTextHint"
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
 
-    <Button android:id="@+id/btn_generate_img" android:layout_width="match_parent" android:layout_height="48dp" android:layout_margin="16dp" android:text="生成图片" android:textColor="@android:color/white" android:backgroundTint="@color/colorPrimary" />
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/img_prompt_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="80dp"
+            android:hint="描述你想要生成的图片..."
+            android:textSize="14sp"
+            android:textColor="@color/colorTextPrimary"
+            android:textColorHint="@color/colorTextHint"
+            android:gravity="top"
+            android:inputType="textMultiLine"
+            android:padding="16dp" />
+    </com.google.android.material.textfield.TextInputLayout>
 
-    <FrameLayout android:id="@+id/img_result_area" android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1">
-        <LinearLayout android:id="@+id/empty_img_state" android:layout_width="match_parent" android:layout_height="match_parent" android:gravity="center" android:orientation="vertical">
-            <TextView android:text="🖼️" android:textSize="48sp" android:gravity="center" />
-            <TextView android:text="选择图像生成模型，输入提示词\n点击生成图片" android:textColor="@color/colorTextSecondary" android:textSize="14sp" android:gravity="center" android:layout_marginTop="16dp" android:lineSpacingExtra="4dp" />
+    <!-- Generate button -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_generate_img"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginHorizontal="12dp"
+        android:layout_marginBottom="8dp"
+        android:text="生成图片"
+        android:textSize="14sp"
+        android:textColor="@color/colorTextWhite"
+        app:backgroundTint="@color/colorPrimary"
+        app:cornerRadius="12dp" />
+
+    <!-- Result area -->
+    <FrameLayout
+        android:id="@+id/img_result_area"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <!-- Empty state -->
+        <LinearLayout
+            android:id="@+id/empty_img_state"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:text="🖼️"
+                android:textSize="48sp"
+                android:gravity="center" />
+
+            <TextView
+                android:text="选择图像生成模型，输入提示词\n点击生成图片"
+                android:textColor="@color/colorTextSecondary"
+                android:textSize="14sp"
+                android:gravity="center"
+                android:layout_marginTop="16dp"
+                android:lineSpacingExtra="4dp" />
         </LinearLayout>
-        <ProgressBar android:id="@+id/img_progress" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="center" android:visibility="gone" />
-        <androidx.recyclerview.widget.RecyclerView android:id="@+id/img_grid" android:layout_width="match_parent" android:layout_height="match_parent" android:padding="16dp" android:visibility="gone" />
+
+        <!-- Progress -->
+        <ProgressBar
+            android:id="@+id/img_progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            android:indeterminateTint="@color/colorPrimary" />
+
+        <!-- Image grid -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/img_grid"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="8dp"
+            android:clipToPadding="false"
+            android:visibility="gone" />
     </FrameLayout>
 </LinearLayout>
