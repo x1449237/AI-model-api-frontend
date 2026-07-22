@@ -2,7 +2,6 @@ package com.aiaggregator.app
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import com.aiaggregator.app.databinding.ActivityMainBinding
 import com.aiaggregator.app.ui.home.HomeFragment
@@ -16,9 +15,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val prefs = getSharedPreferences("app_settings", MODE_PRIVATE)
-        val nightMode = prefs.getInt("night_mode", AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
-        AppCompatDelegate.setDefaultNightMode(nightMode)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
