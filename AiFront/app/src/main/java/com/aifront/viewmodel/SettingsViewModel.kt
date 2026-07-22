@@ -13,20 +13,34 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
     private val _apiKeys = MutableStateFlow<Map<String, String>>(emptyMap())
     val apiKeys: StateFlow<Map<String, String>> = _apiKeys
 
-    init { loadApiKeys() }
+    private val _customApiUrls = MutableStateFlow<Map<String, String>>(emptyMap())
+    val customApiUrls: StateFlow<Map<String, String>> = _customApiUrls
 
-    private fun loadApiKeys() {
+    private val _aiNicknames = MutableStateFlow<Map<String, String>>(emptyMap())
+    val aiNicknames: StateFlow<Map<String, String>> = _aiNicknames
+
+    init { loadAll() }
+
+    private fun loadAll() {
         val keys = mutableMapOf<String, String>()
+        val urls = mutableMapOf<String, String>()
+        val nicknames = mutableMapOf<String, String>()
         VendorConfig.getAllVendors().forEach { vendor ->
             val key = prefs.getString("api_key_${vendor.id}", "") ?: ""
             if (key.isNotEmpty()) keys[vendor.id] = key
+            val url = prefs.getString("api_url_${vendor.id}", "") ?: ""
+            if (url.isNotEmpty()) urls[vendor.id] = url
+            val nickname = prefs.getString("ai_nickname_${vendor.id}", "") ?: ""
+            if (nickname.isNotEmpty()) nicknames[vendor.id] = nickname
         }
         _apiKeys.value = keys
+        _customApiUrls.value = urls
+        _aiNicknames.value = nicknames
     }
 
     fun setApiKey(vendorId: String, apiKey: String) {
         prefs.edit().putString("api_key_$vendorId", apiKey).apply()
-        loadApiKeys()
+        loadAll()
     }
 
     fun getApiKey(vendorId: String): String {
@@ -35,11 +49,51 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
 
     fun removeApiKey(vendorId: String) {
         prefs.edit().remove("api_key_$vendorId").apply()
-        loadApiKeys()
+        loadAll()
     }
 
     fun hasApiKey(vendorId: String): Boolean {
         return getApiKey(vendorId).isNotEmpty()
+    }
+
+    fun setCustomApiUrl(vendorId: String, url: String) {
+        prefs.edit().putString("api_url_$vendorId", url).apply()
+        loadAll()
+    }
+
+    fun getCustomApiUrl(vendorId: String): String {
+        return prefs.getString("api_url_$vendorId", "") ?: ""
+    }
+
+    fun getEffectiveApiUrl(vendorId: String): String {
+        val custom = getCustomApiUrl(vendorId)
+        if (custom.isNotEmpty()) return custom
+        return VendorConfig.getVendorById(vendorId)?.apiBaseUrl ?: ""
+    }
+
+    fun setAiNickname(vendorId: String, nickname: String) {
+        prefs.edit().putString("ai_nickname_$vendorId", nickname).apply()
+        loadAll()
+    }
+
+    fun getAiNickname(vendorId: String): String {
+        return prefs.getString("ai_nickname_$vendorId", "") ?: ""
+    }
+
+    fun getModelCount(vendorId: String): Int {
+        return VendorConfig.getModelsByVendor(vendorId).size
+    }
+
+    fun getModelsByVendor(vendorId: String): List<AIModel> {
+        return VendorConfig.getModelsByVendor(vendorId)
+    }
+
+    fun getVendorName(vendorId: String): String {
+        return VendorConfig.getVendorById(vendorId)?.name ?: vendorId
+    }
+
+    fun getVendorNameEn(vendorId: String): String {
+        return VendorConfig.getVendorById(vendorId)?.nameEn ?: vendorId
     }
 }
 

@@ -100,6 +100,7 @@ class ChatViewModel(application: Application) : AndroidViewModel(application) {
     fun sendMessage(
         content: String,
         apiKey: String,
+        customBaseUrl: String = "",
         isClusterMode: Boolean = false,
         clusterModels: List<AIModel> = emptyList()
     ) {
@@ -137,17 +138,19 @@ class ChatViewModel(application: Application) : AndroidViewModel(application) {
 
             val historyMessages = buildMessageHistory(content)
 
+            val effectiveBaseUrl = customBaseUrl.ifEmpty { vendor.apiBaseUrl }
+
             if (isClusterMode && clusterModels.isNotEmpty()) {
-                sendClusterMessages(conv.id, historyMessages, apiKey, clusterModels)
+                sendClusterMessages(conv.id, historyMessages, apiKey, effectiveBaseUrl, clusterModels)
             } else {
-                sendSingleMessage(conv.id, model, vendor, historyMessages, apiKey)
+                sendSingleMessage(conv.id, model, vendor, effectiveBaseUrl, historyMessages, apiKey)
             }
         }
     }
 
     private suspend fun sendSingleMessage(
         conversationId: Long, model: AIModel, vendor: Vendor,
-        messages: List<MessageContent>, apiKey: String
+        baseUrl: String, messages: List<MessageContent>, apiKey: String
     ) {
         _isStreaming.value = true
         _streamingContent.value = ""
@@ -156,7 +159,7 @@ class ChatViewModel(application: Application) : AndroidViewModel(application) {
         var fullContent = ""
 
         repository.chatStream(
-            vendor.apiBaseUrl, apiKey, model, messages,
+            baseUrl, apiKey, model, messages,
             _temperature.value, _topP.value, _maxTokens.value, vendor.apiType
         ).collect { response ->
             if (response.isFinished) {
@@ -192,7 +195,7 @@ class ChatViewModel(application: Application) : AndroidViewModel(application) {
 
     private suspend fun sendClusterMessages(
         conversationId: Long, messages: List<MessageContent>,
-        apiKey: String, clusterModels: List<AIModel>
+        apiKey: String, baseUrl: String, clusterModels: List<AIModel>
     ) {
         _isStreaming.value = true
         _streamingContent.value = ""
@@ -206,7 +209,7 @@ class ChatViewModel(application: Application) : AndroidViewModel(application) {
 
                 try {
                     repository.chatStream(
-                        vendor.apiBaseUrl, apiKey, model, messages,
+                        baseUrl, apiKey, model, messages,
                         _temperature.value, _topP.value, _maxTokens.value, vendor.apiType
                     ).collect { response ->
                         if (response.isFinished) {

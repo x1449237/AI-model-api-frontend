@@ -107,7 +107,8 @@ fun ClusterScreen(
                         onClick = {
                             if (inputText.isNotBlank() && selectedModels.size >= 2) {
                                 val apiKey = settingsViewModel.getApiKey(selectedModels.first().vendorId)
-                                chatViewModel.sendMessage(inputText.trim(), apiKey.ifEmpty { "demo-key" }, isClusterMode = true, clusterModels = selectedModels)
+                                val customUrl = settingsViewModel.getCustomApiUrl(selectedModels.first().vendorId)
+                                chatViewModel.sendMessage(inputText.trim(), apiKey.ifEmpty { "demo-key" }, customUrl, isClusterMode = true, clusterModels = selectedModels)
                                 inputText = ""
                             }
                         },

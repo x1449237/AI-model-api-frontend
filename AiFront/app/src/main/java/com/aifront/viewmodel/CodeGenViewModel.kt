@@ -38,7 +38,7 @@ class CodeGenViewModel(application: Application) : AndroidViewModel(application)
     fun setLanguage(language: String) { _selectedLanguage.value = language }
 
     fun generateCode(
-        prompt: String, model: AIModel, vendor: Vendor, apiKey: String
+        prompt: String, model: AIModel, vendor: Vendor, apiKey: String, customBaseUrl: String = ""
     ) {
         viewModelScope.launch {
             _isGenerating.value = true
@@ -60,9 +60,11 @@ class CodeGenViewModel(application: Application) : AndroidViewModel(application)
                 MessageContent("user", codePrompt)
             )
 
+            val baseUrl = customBaseUrl.ifEmpty { vendor.apiBaseUrl }
+
             var fullContent = ""
             repository.chatStream(
-                vendor.apiBaseUrl, apiKey, model, messages,
+                baseUrl, apiKey, model, messages,
                 0.3f, 0.9f, 4096, vendor.apiType
             ).collect { response ->
                 if (response.isFinished) {

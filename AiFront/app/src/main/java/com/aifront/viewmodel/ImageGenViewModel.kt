@@ -37,7 +37,7 @@ class ImageGenViewModel(application: Application) : AndroidViewModel(application
     fun setImageCount(count: Int) { _imageCount.value = count.coerceIn(1, 4) }
 
     fun generateImage(
-        prompt: String, model: AIModel, vendor: Vendor, apiKey: String
+        prompt: String, model: AIModel, vendor: Vendor, apiKey: String, customBaseUrl: String = ""
     ) {
         viewModelScope.launch {
             _isGenerating.value = true
@@ -45,8 +45,9 @@ class ImageGenViewModel(application: Application) : AndroidViewModel(application
 
             try {
                 val size = ratioToSize[_selectedRatio.value] ?: "1024x1024"
+                val baseUrl = customBaseUrl.ifEmpty { vendor.apiBaseUrl }
                 val response = repository.generateImage(
-                    vendor.apiBaseUrl, apiKey, model, prompt, _imageCount.value, size
+                    baseUrl, apiKey, model, prompt, _imageCount.value, size
                 )
                 _generatedImages.value = response.images.map { it.url }
             } catch (e: Exception) {

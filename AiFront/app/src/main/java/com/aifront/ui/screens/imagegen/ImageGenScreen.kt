@@ -135,7 +135,8 @@ fun ImageGenScreen(
                         if (inputPrompt.isNotBlank() && selectedModel != null) {
                             val vendor = selectedVendor!!
                             val apiKey = settingsViewModel.getApiKey(vendor.id)
-                            imageGenViewModel.generateImage(inputPrompt.trim(), selectedModel!!, vendor, apiKey.ifEmpty { "demo-key" })
+                            val customUrl = settingsViewModel.getCustomApiUrl(vendor.id)
+                            imageGenViewModel.generateImage(inputPrompt.trim(), selectedModel!!, vendor, apiKey.ifEmpty { "demo-key" }, customUrl)
                             inputPrompt = ""
                         }
                     },

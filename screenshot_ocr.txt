@@ -1,0 +1,35 @@
+3:12 加 昌                          太人会 ED
+
+《 添加 Al 好友
+
+Al 昵称
+给Al好友起个名字
+
+选择厂家
+
+DeepSeek      OpenAl      Moonshot AI/Kimi
+
+2 个模型           3 个模型       3 个模型
+
+Anthropic/Claude 百度文心 ”阿里通义干问
+
+3 个模型                      2 个模型        3 个模型
+
+API 地址
+
+https://api.deepseek.comy/v1/chat/completions
+选择三家后自动填充，也支持自定义第三方代理或自建模型
+模型
+  deepseek-coder
+
+API Key
+
+SK-.…
+
+API Key 仅保存在本地设备，不会上传到服务器
+
+口
+8
+SS
+则 ])]O
+

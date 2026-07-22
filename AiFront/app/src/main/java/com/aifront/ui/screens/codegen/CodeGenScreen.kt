@@ -104,7 +104,8 @@ fun CodeGenScreen(
                         if (inputPrompt.isNotBlank() && selectedModel != null) {
                             val vendor = selectedVendor!!
                             val apiKey = settingsViewModel.getApiKey(vendor.id)
-                            codeGenViewModel.generateCode(inputPrompt.trim(), selectedModel!!, vendor, apiKey.ifEmpty { "demo-key" })
+                            val customUrl = settingsViewModel.getCustomApiUrl(vendor.id)
+                            codeGenViewModel.generateCode(inputPrompt.trim(), selectedModel!!, vendor, apiKey.ifEmpty { "demo-key" }, customUrl)
                             inputPrompt = ""
                         }
                     },

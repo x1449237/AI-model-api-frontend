@@ -117,7 +117,8 @@ fun HomeScreen(
                         if (inputText.isNotBlank() && selectedModel != null) {
                             val vendor = selectedVendor!!
                             val apiKey = settingsViewModel.getApiKey(vendor.id)
-                            chatViewModel.sendMessage(inputText.trim(), apiKey.ifEmpty { "demo-key" })
+                            val customUrl = settingsViewModel.getCustomApiUrl(vendor.id)
+                            chatViewModel.sendMessage(inputText.trim(), apiKey.ifEmpty { "demo-key" }, customUrl)
                             inputText = ""
                         }
                     },
