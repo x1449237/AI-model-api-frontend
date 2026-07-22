@@ -1,6 +1,7 @@
 package com.aifront.ui.screens.home
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -14,6 +15,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -77,10 +79,40 @@ fun HomeScreen(
                 if (selectedModel!!.supportsImage) ModelTag("图片", TagImage)
                 ModelTag("${selectedModel!!.contextLength / 1000}K上下文", Gray600)
             }
+        } else {
+            // 提示用户添加 AI 好友
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 12.dp, vertical = 6.dp)
+                    .clickable { onNavigateToSettings() },
+                shape = RoundedCornerShape(12.dp),
+                colors = CardDefaults.cardColors(containerColor = Blue50)
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth().padding(14.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        Icons.Default.PersonAdd,
+                        contentDescription = null,
+                        tint = Blue600,
+                        modifier = Modifier.size(28.dp)
+                    )
+                    Spacer(modifier = Modifier.width(12.dp))
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text("添加 AI 好友", fontWeight = FontWeight.SemiBold, fontSize = 15.sp, color = Gray800)
+                        Text("配置 API Key 和模型，开始对话", fontSize = 12.sp, color = Gray500)
+                    }
+                    Icon(Icons.Default.ChevronRight, contentDescription = null, tint = Gray400)
+                }
+            }
         }
 
         if (messages.isEmpty()) {
-            EmptyStateView(title = "开始对话", subtitle = "选择厂商和模型后，输入消息开始对话\n支持流式输出和实时响应")
+            Box(modifier = Modifier.weight(1f).fillMaxWidth(), contentAlignment = Alignment.Center) {
+                EmptyStateView(title = "开始对话", subtitle = "选择厂商和模型后，输入消息开始对话\n支持流式输出和实时响应")
+            }
         } else {
             LazyColumn(
                 state = listState,
