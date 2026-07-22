@@ -118,12 +118,14 @@ class CodeFragment : Fragment() {
                 text = lang
                 isCheckable = true
                 isChecked = lang == selectedLanguage
-                chipBackgroundColor = ContextCompat.getColorStateList(ctx, R.color.colorChipBg)
+                chipBackgroundColor = android.content.res.ColorStateList.valueOf(ContextCompat.getColor(ctx, R.color.colorChipBg))
                 setTextColor(
-                    ContextCompat.getColorStateList(
-                        ctx,
-                        if (lang == selectedLanguage) R.color.colorChipSelectedText
-                        else R.color.colorChipUnselectedText
+                    android.content.res.ColorStateList.valueOf(
+                        ContextCompat.getColor(
+                            ctx,
+                            if (lang == selectedLanguage) R.color.colorChipSelectedText
+                            else R.color.colorChipUnselectedText
+                        )
                     )
                 )
                 setOnClickListener {
@@ -141,11 +143,13 @@ class CodeFragment : Fragment() {
             val chip = langChipsContainer.getChildAt(i) as? Chip ?: continue
             val isSelected = chip.text == selectedLanguage
             chip.isChecked = isSelected
-            chip.chipBackgroundColor = ContextCompat.getColorStateList(ctx, R.color.colorChipBg)
+            chip.chipBackgroundColor = android.content.res.ColorStateList.valueOf(ContextCompat.getColor(ctx, R.color.colorChipBg))
             chip.setTextColor(
-                ContextCompat.getColorStateList(
-                    ctx,
-                    if (isSelected) R.color.colorChipSelectedText else R.color.colorChipUnselectedText
+                android.content.res.ColorStateList.valueOf(
+                    ContextCompat.getColor(
+                        ctx,
+                        if (isSelected) R.color.colorChipSelectedText else R.color.colorChipUnselectedText
+                    )
                 )
             )
         }

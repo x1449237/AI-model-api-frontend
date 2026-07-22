@@ -153,8 +153,10 @@ class ImageFragment : Fragment() {
         val ctx = requireContext()
         val models = VendorConfig.getImageModels()
         models.forEach { model ->
+            val chipTag = "${model.vendorName} - ${model.name}"
             val chip = Chip(ctx).apply {
-                text = "${model.vendorName} - ${model.name}"
+                text = chipTag
+                setTag(chipTag)
                 isCheckable = true
                 setOnClickListener {
                     selectedModel = model
@@ -166,11 +168,10 @@ class ImageFragment : Fragment() {
     }
 
     private fun refreshModelChipStates() {
+        val selectedTag = selectedModel?.let { "${it.vendorName} - ${it.name}" }
         for (i in 0 until modelChipsContainer.childCount) {
             val chip = modelChipsContainer.getChildAt(i) as? Chip ?: continue
-            chip.isChecked = chip == modelChipsContainer.findViewWithTag<Chip>(selectedModel?.let {
-                "${it.vendorName} - ${it.name}"
-            }) ?: false
+            chip.isChecked = chip.tag == selectedTag
         }
     }
 

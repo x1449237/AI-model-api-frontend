@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.AIAggregator" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">#4A90D9</item>
+        <item name="colorPrimaryVariant">#3A7BC8</item>
+        <item name="colorOnPrimary">#FFFFFF</item>
+        <item name="colorSecondary">#4A90D9</item>
+        <item name="colorSecondaryVariant">#3A7BC8</item>
+        <item name="colorOnSecondary">#FFFFFF</item>
+        <item name="android:colorBackground">#1A1A1A</item>
+        <item name="colorSurface">#212121</item>
+        <item name="colorOnSurface">#E0E0E0</item>
+        <item name="colorSurfaceVariant">#2D2D2D</item>
+        <item name="colorOnSurfaceVariant">#B0B0B0</item>
+        <item name="colorError">#CF6679</item>
+        <item name="colorOnError">#000000</item>
+        <item name="android:statusBarColor">#1A1A1A</item>
+        <item name="android:navigationBarColor">#1A1A1A</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="bottomNavigationStyle">@style/Widget.AIAggregator.BottomNavigationView</item>
+        <item name="tabStyle">@style/Widget.AIAggregator.TabLayout</item>
+    </style>
+
+    <style name="Widget.AIAggregator.BottomNavigationView" parent="Widget.MaterialComponents.BottomNavigationView">
+        <item name="android:background">#1A1A1A</item>
+        <item name="itemIconTint">@color/bottom_nav_color</item>
+        <item name="itemTextColor">@color/bottom_nav_color</item>
+    </style>
+
+    <style name="Widget.AIAggregator.TabLayout" parent="Widget.MaterialComponents.TabLayout">
+        <item name="android:background">#212121</item>
+        <item name="tabTextColor">#B0B0B0</item>
+        <item name="tabSelectedTextColor">#4A90D9</item>
+        <item name="tabIndicatorColor">#4A90D9</item>
+    </style>
+</resources>

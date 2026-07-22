@@ -517,11 +517,11 @@ class HomeFragment : Fragment() {
         if (isClusterMode) {
             sendBtn.text = "集群对比"
             sendBtn.setIconResource(android.R.drawable.ic_menu_compass)
-            sendBtn.iconTint = ContextCompat.getColorStateList(requireContext(), R.color.colorSendButton)
+            sendBtn.iconTint = android.content.res.ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.colorSendButton))
         } else {
             sendBtn.text = ""
             sendBtn.setIconResource(R.drawable.ic_send)
-            sendBtn.iconTint = ContextCompat.getColorStateList(requireContext(), R.color.colorSendButton)
+            sendBtn.iconTint = android.content.res.ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.colorSendButton))
         }
     }
 

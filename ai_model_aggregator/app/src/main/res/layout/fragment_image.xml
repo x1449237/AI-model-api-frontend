@@ -39,9 +39,7 @@
             android:id="@+id/ratio_spinner"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:entries="@array/image_ratios"
             android:background="@drawable/bg_input"
-            android:popupBackground="@color/colorSurface"
             android:dropDownVerticalOffset="4dp" />
 
         <View android:layout_width="0dp" android:layout_height="0dp" android:layout_weight="1" />
@@ -56,9 +54,7 @@
             android:id="@+id/num_spinner"
             android:layout_width="80dp"
             android:layout_height="wrap_content"
-            android:entries="@array/image_counts"
             android:background="@drawable/bg_input"
-            android:popupBackground="@color/colorSurface"
             android:dropDownVerticalOffset="4dp" />
     </LinearLayout>
 

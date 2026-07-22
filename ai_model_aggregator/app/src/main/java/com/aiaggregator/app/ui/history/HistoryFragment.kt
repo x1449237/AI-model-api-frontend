@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
@@ -134,6 +135,10 @@ class MyTabFragment : Fragment() {
         VendorConfig.vendors.forEach { vendor ->
             rootLayout.addView(buildVendorCard(ctx, vendor))
         }
+
+        // ==================== Section: 主题模式 ====================
+        rootLayout.addView(buildSpacer(ctx, 24))
+        rootLayout.addView(buildThemeSection(ctx))
 
         // ==================== Section: 关于 ====================
         rootLayout.addView(buildSpacer(ctx, 24))
@@ -368,6 +373,83 @@ class MyTabFragment : Fragment() {
                 (heightDp * resources.displayMetrics.density).toInt()
             )
         }
+    }
+
+    // ---- Theme Section ----
+
+    private fun buildThemeSection(ctx: android.content.Context): View {
+        val card = LinearLayout(ctx).apply {
+            orientation = LinearLayout.VERTICAL
+            setBackgroundColor(ContextCompat.getColor(ctx, R.color.colorSurface))
+            setPadding(
+                (20 * resources.displayMetrics.density).toInt(),
+                (20 * resources.displayMetrics.density).toInt(),
+                (20 * resources.displayMetrics.density).toInt(),
+                (20 * resources.displayMetrics.density).toInt()
+            )
+        }
+
+        // Title
+        card.addView(TextView(ctx).apply {
+            text = "主题模式"
+            textSize = 18f
+            setTypeface(null, Typeface.BOLD)
+            setTextColor(ContextCompat.getColor(ctx, R.color.colorTextPrimary))
+            setPadding(0, 0, 0, (16 * resources.displayMetrics.density).toInt())
+        })
+
+        val options = listOf(
+            "跟随系统" to AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM,
+            "浅色模式" to AppCompatDelegate.MODE_NIGHT_NO,
+            "深色模式" to AppCompatDelegate.MODE_NIGHT_YES
+        )
+
+        val currentMode = ctx.getSharedPreferences("app_settings", android.content.Context.MODE_PRIVATE)
+            .getInt("night_mode", AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+
+        val buttonRow = LinearLayout(ctx).apply {
+            orientation = LinearLayout.HORIZONTAL
+            gravity = Gravity.CENTER
+        }
+
+        options.forEach { (label, mode) ->
+            val isSelected = mode == currentMode
+            val btn = Button(ctx).apply {
+                text = label
+                textSize = 13f
+                setTextColor(
+                    if (isSelected) android.graphics.Color.WHITE
+                    else ContextCompat.getColor(ctx, R.color.colorTextPrimary)
+                )
+                setBackgroundColor(
+                    if (isSelected) ContextCompat.getColor(ctx, R.color.colorPrimary)
+                    else ContextCompat.getColor(ctx, R.color.colorSurfaceVariant)
+                )
+                layoutParams = LinearLayout.LayoutParams(
+                    0,
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    1f
+                ).apply {
+                    leftMargin = if (options.indexOf(Pair(label, mode)) > 0)
+                        (8 * resources.displayMetrics.density).toInt()
+                    else 0
+                    rightMargin = if (options.indexOf(Pair(label, mode)) < options.size - 1)
+                        (8 * resources.displayMetrics.density).toInt()
+                    else 0
+                }
+                setOnClickListener {
+                    AppCompatDelegate.setDefaultNightMode(mode)
+                    ctx.getSharedPreferences("app_settings", android.content.Context.MODE_PRIVATE)
+                        .edit().putInt("night_mode", mode).apply()
+                    // Refresh theme
+                    activity?.recreate()
+                }
+            }
+            buttonRow.addView(btn)
+        }
+
+        card.addView(buttonRow)
+        return card
     }
 
     // ---- About Section ----
