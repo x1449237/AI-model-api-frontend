@@ -82,7 +82,6 @@
     <!-- Copy button (AI messages only) -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_copy"
-        style="@style/Widget.Material3.Button.TextButton"
         android:layout_width="wrap_content"
         android:layout_height="24dp"
         android:layout_marginStart="20dp"

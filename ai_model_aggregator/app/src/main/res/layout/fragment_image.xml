@@ -81,8 +81,7 @@
             app:cornerRadius="8dp"
             app:backgroundTint="@color/colorPrimary"
             app:icon="@android:drawable/ic_menu_gallery"
-            app:iconSize="16dp"
-            style="@style/Widget.Material3.Button.TextButton" />
+            app:iconSize="16dp" />
 
         <ImageView
             android:id="@+id/ref_image_preview"
@@ -115,8 +114,7 @@
         app:boxCornerRadiusBottomStart="12dp"
         app:boxCornerRadiusTopEnd="12dp"
         app:boxCornerRadiusTopStart="12dp"
-        app:hintTextColor="@color/colorTextHint"
-        style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
+        app:hintTextColor="@color/colorTextHint">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/img_prompt_input"

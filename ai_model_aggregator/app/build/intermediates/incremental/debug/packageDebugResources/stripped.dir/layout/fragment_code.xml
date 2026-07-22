@@ -31,7 +31,6 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_select_model"
-            style="@style/Widget.Material3.Button.TonalButton"
             android:layout_width="wrap_content"
             android:layout_height="36dp"
             android:text="选择模型"
@@ -60,8 +59,7 @@
         app:boxCornerRadiusBottomStart="12dp"
         app:boxCornerRadiusTopEnd="12dp"
         app:boxCornerRadiusTopStart="12dp"
-        app:hintTextColor="@color/colorTextHint"
-        style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
+        app:hintTextColor="@color/colorTextHint">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/code_desc_input"
@@ -114,7 +112,6 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_copy"
-            style="@style/Widget.Material3.Button.TextButton"
             android:layout_width="wrap_content"
             android:layout_height="36dp"
             android:text="复制"
@@ -123,7 +120,6 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_export"
-            style="@style/Widget.Material3.Button.TextButton"
             android:layout_width="wrap_content"
             android:layout_height="36dp"
             android:text="导出"
@@ -132,7 +128,6 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_save_local"
-            style="@style/Widget.Material3.Button.TextButton"
             android:layout_width="wrap_content"
             android:layout_height="36dp"
             android:text="保存到本地"

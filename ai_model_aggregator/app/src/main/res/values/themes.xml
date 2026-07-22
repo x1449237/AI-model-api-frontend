@@ -34,13 +34,13 @@
         <item name="tabStyle">@style/Widget.AIAggregator.TabLayout</item>
     </style>
 
-    <style name="Widget.AIAggregator.BottomNavigationView" parent="Widget.Material3.BottomNavigationView">
+    <style name="Widget.AIAggregator.BottomNavigationView" parent="Widget.MaterialComponents.BottomNavigationView">
         <item name="android:background">#1A1A1A</item>
         <item name="itemIconTint">@color/bottom_nav_color</item>
         <item name="itemTextColor">@color/bottom_nav_color</item>
     </style>
 
-    <style name="Widget.AIAggregator.TabLayout" parent="Widget.Material3.TabLayout">
+    <style name="Widget.AIAggregator.TabLayout" parent="Widget.MaterialComponents.TabLayout">
         <item name="android:background">#212121</item>
         <item name="tabTextColor">#B0B0B0</item>
         <item name="tabSelectedTextColor">#4A90D9</item>

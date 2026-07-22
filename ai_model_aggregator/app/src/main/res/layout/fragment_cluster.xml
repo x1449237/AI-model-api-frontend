@@ -17,8 +17,7 @@
         app:boxCornerRadiusBottomStart="12dp"
         app:boxCornerRadiusTopEnd="12dp"
         app:boxCornerRadiusTopStart="12dp"
-        app:hintTextColor="@color/colorTextHint"
-        style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
+        app:hintTextColor="@color/colorTextHint">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/cluster_prompt"
@@ -62,8 +61,7 @@
             android:textColor="@color/colorTextPrimary"
             app:backgroundTint="@color/colorSurfaceVariant"
             app:cornerRadius="18dp"
-            android:layout_marginEnd="8dp"
-            style="@style/Widget.Material3.Button.TextButton" />
+            android:layout_marginEnd="8dp" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_run_cluster"
