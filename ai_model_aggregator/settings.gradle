@@ -1,0 +1,2 @@
+rootProject.name = "AI聚合助手"
+include ':app'

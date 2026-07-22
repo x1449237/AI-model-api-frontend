@@ -1,0 +1,122 @@
+[
+    {
+        "merged": "com.aiaggregator.app-merged_res-48:/drawable_ic_launcher_background.xml.flat",
+        "source": "com.aiaggregator.app-main-50:/drawable/ic_launcher_background.xml"
+    },
+    {
+        "merged": "com.aiaggregator.app-merged_res-48:/menu_bottom_nav_menu.xml.flat",
+        "source": "com.aiaggregator.app-main-50:/menu/bottom_nav_menu.xml"
+    },
+    {
+        "merged": "com.aiaggregator.app-merged_res-48:/drawable_bg_rank_default.xml.flat",
+        "source": "com.aiaggregator.app-main-50:/drawable/bg_rank_default.xml"
+    },
+    {
+        "merged": "com.aiaggregator.app-merged_res-48:/drawable_ic_send.xml.flat",
+        "source": "com.aiaggregator.app-main-50:/drawable/ic_send.xml"
+    },
+    {
+        "merged": "com.aiaggregator.app-merged_res-48:/layout_fragment_home.xml.flat",
+        "source": "com.aiaggregator.app-main-50:/layout/fragment_home.xml"
+    },
+    {
+        "merged": "com.aiaggregator.app-merged_res-48:/drawable_ic_tune.xml.flat",
+        "source": "com.aiaggregator.app-main-50:/drawable/ic_tune.xml"
+    },
+    {
+        "merged": "com.aiaggregator.app-merged_res-48:/drawable_ic_image.xml.flat",
+        "source": "com.aiaggregator.app-main-50:/drawable/ic_image.xml"
+    },
+    {
+        "merged": "com.aiaggregator.app-merged_res-48:/drawable_bg_rank_bronze.xml.flat",
+        "source": "com.aiaggregator.app-main-50:/drawable/bg_rank_bronze.xml"
+    },
+    {
+        "merged": "com.aiaggregator.app-merged_res-48:/drawable_ic_code.xml.flat",
+        "source": "com.aiaggregator.app-main-50:/drawable/ic_code.xml"
+    },
+    {
+        "merged": "com.aiaggregator.app-merged_res-48:/drawable_ic_template.xml.flat",
+        "source": "com.aiaggregator.app-main-50:/drawable/ic_template.xml"
+    },
+    {
+        "merged": "com.aiaggregator.app-merged_res-48:/drawable_bg_input.xml.flat",
+        "source": "com.aiaggregator.app-main-50:/drawable/bg_input.xml"
+    },
+    {
+        "merged": "com.aiaggregator.app-merged_res-48:/drawable_ic_compare.xml.flat",
+        "source": "com.aiaggregator.app-main-50:/drawable/ic_compare.xml"
+    },
+    {
+        "merged": "com.aiaggregator.app-merged_res-48:/xml_file_paths.xml.flat",
+        "source": "com.aiaggregator.app-main-50:/xml/file_paths.xml"
+    },
+    {
+        "merged": "com.aiaggregator.app-merged_res-48:/layout_fragment_image.xml.flat",
+        "source": "com.aiaggregator.app-main-50:/layout/fragment_image.xml"
+    },
+    {
+        "merged": "com.aiaggregator.app-merged_res-48:/layout_fragment_history.xml.flat",
+        "source": "com.aiaggregator.app-main-50:/layout/fragment_history.xml"
+    },
+    {
+        "merged": "com.aiaggregator.app-merged_res-48:/drawable_bg_rank_silver.xml.flat",
+        "source": "com.aiaggregator.app-main-50:/drawable/bg_rank_silver.xml"
+    },
+    {
+        "merged": "com.aiaggregator.app-merged_res-48:/drawable_ic_launcher_foreground.xml.flat",
+        "source": "com.aiaggregator.app-main-50:/drawable/ic_launcher_foreground.xml"
+    },
+    {
+        "merged": "com.aiaggregator.app-merged_res-48:/layout_item_chat_message.xml.flat",
+        "source": "com.aiaggregator.app-main-50:/layout/item_chat_message.xml"
+    },
+    {
+        "merged": "com.aiaggregator.app-merged_res-48:/layout_activity_main.xml.flat",
+        "source": "com.aiaggregator.app-main-50:/layout/activity_main.xml"
+    },
+    {
+        "merged": "com.aiaggregator.app-merged_res-48:/drawable_bg_avatar_small.xml.flat",
+        "source": "com.aiaggregator.app-main-50:/drawable/bg_avatar_small.xml"
+    },
+    {
+        "merged": "com.aiaggregator.app-merged_res-48:/drawable_ic_chat.xml.flat",
+        "source": "com.aiaggregator.app-main-50:/drawable/ic_chat.xml"
+    },
+    {
+        "merged": "com.aiaggregator.app-merged_res-48:/drawable_ic_history.xml.flat",
+        "source": "com.aiaggregator.app-main-50:/drawable/ic_history.xml"
+    },
+    {
+        "merged": "com.aiaggregator.app-merged_res-48:/layout_fragment_code.xml.flat",
+        "source": "com.aiaggregator.app-main-50:/layout/fragment_code.xml"
+    },
+    {
+        "merged": "com.aiaggregator.app-merged_res-48:/layout_item_image_result.xml.flat",
+        "source": "com.aiaggregator.app-main-50:/layout/item_image_result.xml"
+    },
+    {
+        "merged": "com.aiaggregator.app-merged_res-48:/color_bottom_nav_color.xml.flat",
+        "source": "com.aiaggregator.app-main-50:/color/bottom_nav_color.xml"
+    },
+    {
+        "merged": "com.aiaggregator.app-merged_res-48:/drawable_bg_image_placeholder.xml.flat",
+        "source": "com.aiaggregator.app-main-50:/drawable/bg_image_placeholder.xml"
+    },
+    {
+        "merged": "com.aiaggregator.app-merged_res-48:/drawable_bg_rank_gold.xml.flat",
+        "source": "com.aiaggregator.app-main-50:/drawable/bg_rank_gold.xml"
+    },
+    {
+        "merged": "com.aiaggregator.app-merged_res-48:/layout_item_cluster_model.xml.flat",
+        "source": "com.aiaggregator.app-main-50:/layout/item_cluster_model.xml"
+    },
+    {
+        "merged": "com.aiaggregator.app-merged_res-48:/layout_fragment_cluster.xml.flat",
+        "source": "com.aiaggregator.app-main-50:/layout/fragment_cluster.xml"
+    },
+    {
+        "merged": "com.aiaggregator.app-merged_res-48:/drawable_ic_add.xml.flat",
+        "source": "com.aiaggregator.app-main-50:/drawable/ic_add.xml"
+    }
+]
